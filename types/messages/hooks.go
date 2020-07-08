@@ -1,8 +1,8 @@
 package messages
 
 import (
-	"github.com/statping/statping/types/metrics"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/metrics"
+	"github.com/torusresearch/statping/utils"
 )
 
 // BeforeCreate for Message will set CreatedAt to UTC

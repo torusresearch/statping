@@ -3,14 +3,14 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/statping/statping/types/errors"
+	"github.com/torusresearch/statping/types/errors"
 	"html/template"
 	"net/http"
 	"path"
 	"time"
 
-	"github.com/statping/statping/source"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/source"
+	"github.com/torusresearch/statping/utils"
 )
 
 const (

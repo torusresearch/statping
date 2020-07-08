@@ -32,11 +32,11 @@
 
                     <h6 class="mt-4 mb-3 text-muted">Statping Links</h6>
 
-                    <a href="https://github.com/statping/statping/wiki" class="mb-2 font-2 text-decoration-none text-muted">
+                    <a href="https://github.com/torusresearch/statping/wiki" class="mb-2 font-2 text-decoration-none text-muted">
                         <font-awesome-icon icon="question" class="mr-3"/> {{$t('settings.docs')}}
                     </a>
 
-                    <a href="https://github.com/statping/statping/wiki/API" class="mb-2 font-2 text-decoration-none text-muted">
+                    <a href="https://github.com/torusresearch/statping/wiki/API" class="mb-2 font-2 text-decoration-none text-muted">
                         <font-awesome-icon icon="laptop" class="mr-2"/> API {{$t('settings.docs')}}
                     </a>
 
@@ -44,12 +44,12 @@
                         <font-awesome-icon icon="book" class="mr-3"/> {{$t('settings.changelog')}}
                     </a>
 
-                    <a href="https://github.com/statping/statping" class="mb-2 font-2 text-decoration-none text-muted">
+                    <a href="https://github.com/torusresearch/statping" class="mb-2 font-2 text-decoration-none text-muted">
                         <font-awesome-icon icon="code-branch" class="mr-3"/> {{$t('settings.repo')}}
                     </a>
 
                     <div class="row justify-content-center mt-2">
-                        <github-button href="https://github.com/statping/statping" data-icon="octicon-star" data-show-count="true" aria-label="Star Statping on GitHub">Star</github-button>
+                        <github-button href="https://github.com/torusresearch/statping" data-icon="octicon-star" data-show-count="true" aria-label="Star Statping on GitHub">Star</github-button>
                     </div>
 
                 </div>

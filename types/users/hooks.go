@@ -1,6 +1,6 @@
 package users
 
-import "github.com/statping/statping/utils"
+import "github.com/torusresearch/statping/utils"
 
 func (u *User) BeforeCreate() error {
 	u.Password = utils.HashPassword(u.Password)

@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/statping/statping/types/failures"
-	"github.com/statping/statping/types/notifications"
-	"github.com/statping/statping/types/notifier"
-	"github.com/statping/statping/types/services"
-	"github.com/statping/statping/utils"
-	"net/url"
-	"strings"
+	"github.com/torusresearch/statping/types/failures"
+	"github.com/torusresearch/statping/types/notifications"
+	"github.com/torusresearch/statping/types/notifier"
+	"github.com/torusresearch/statping/types/services"
+	"github.com/torusresearch/statping/utils"
+	"strconv"
 	"time"
 )
 
@@ -55,13 +54,19 @@ var Telegram = &telegram{&notifications.Notification{
 
 // Send will send a HTTP Post to the Telegram API. It accepts type: string
 func (t *telegram) sendMessage(message string) (string, error) {
-	apiEndpoint := fmt.Sprintf("https://api.telegram.org/bot%v/sendMessage", t.ApiSecret)
+	chatID, err := strconv.Atoi(t.Var1)
+	if err != nil {
+		return "", err
+	}
 
-	v := url.Values{}
-	v.Set("chat_id", t.Var1)
-	v.Set("text", message)
+	apiEndpoint := fmt.Sprintf("https://api.telegram.org/bot%v/sendMessage?chat_id=%d&text=%v", t.ApiSecret, chatID, message)
+	log.Info(apiEndpoint)
 
-	contents, _, err := utils.HttpRequest(apiEndpoint, "POST", "application/x-www-form-urlencoded", nil, strings.NewReader(v.Encode()), time.Duration(10*time.Second), true, nil)
+	//v := url.Values{}
+	//v.Set("chat_id",t.Var1)
+	//v.Set("text", message)
+
+	contents, _, err := utils.HttpRequest(apiEndpoint, "POST", "application/x-www-form-urlencoded", nil, nil, time.Duration(10*time.Second), true, nil)
 
 	success, _ := telegramSuccess(contents)
 	if !success {

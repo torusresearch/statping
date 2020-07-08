@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"github.com/statping/statping/notifiers"
-	"github.com/statping/statping/types/services"
 	"github.com/stretchr/testify/assert"
+	"github.com/torusresearch/statping/notifiers"
+	"github.com/torusresearch/statping/types/services"
 	"testing"
 )
 

@@ -3,11 +3,11 @@ package notifiers
 import (
 	"bytes"
 	"errors"
-	"github.com/statping/statping/types/failures"
-	"github.com/statping/statping/types/notifications"
-	"github.com/statping/statping/types/notifier"
-	"github.com/statping/statping/types/services"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/failures"
+	"github.com/torusresearch/statping/types/notifications"
+	"github.com/torusresearch/statping/types/notifier"
+	"github.com/torusresearch/statping/types/services"
+	"github.com/torusresearch/statping/utils"
 	"strings"
 	"time"
 )

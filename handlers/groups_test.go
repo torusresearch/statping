@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"github.com/statping/statping/types/core"
-	"github.com/statping/statping/types/groups"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/torusresearch/statping/types/core"
+	"github.com/torusresearch/statping/types/groups"
 	"testing"
 )
 

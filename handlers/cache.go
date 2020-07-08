@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/utils"
 	"sync"
 	"time"
 )

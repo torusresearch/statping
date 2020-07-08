@@ -1,7 +1,7 @@
 package checkins
 
 import (
-	"github.com/statping/statping/types/failures"
+	"github.com/torusresearch/statping/types/failures"
 	"time"
 )
 

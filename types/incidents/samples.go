@@ -1,7 +1,7 @@
 package incidents
 
 import (
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/utils"
 	"time"
 )
 

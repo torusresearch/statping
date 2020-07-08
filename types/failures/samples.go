@@ -2,9 +2,9 @@ package failures
 
 import (
 	"fmt"
-	"github.com/statping/statping/types"
-	"github.com/statping/statping/utils"
 	gormbulk "github.com/t-tiger/gorm-bulk-insert/v2"
+	"github.com/torusresearch/statping/types"
+	"github.com/torusresearch/statping/utils"
 	"time"
 )
 

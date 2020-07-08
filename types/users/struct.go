@@ -1,7 +1,7 @@
 package users
 
 import (
-	"github.com/statping/statping/types/null"
+	"github.com/torusresearch/statping/types/null"
 	"time"
 )
 

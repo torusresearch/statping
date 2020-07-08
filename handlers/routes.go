@@ -4,12 +4,12 @@ import (
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/statping/statping/source"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/source"
+	"github.com/torusresearch/statping/utils"
 	"net/http"
 	"net/http/pprof"
 
-	_ "github.com/statping/statping/types/metrics"
+	_ "github.com/torusresearch/statping/types/metrics"
 )
 
 var (

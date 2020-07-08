@@ -3,7 +3,7 @@ package services
 import (
 	"fmt"
 	humanize "github.com/dustin/go-humanize"
-	"github.com/statping/statping/types/failures"
+	"github.com/torusresearch/statping/types/failures"
 	"strings"
 	"time"
 )

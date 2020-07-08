@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/utils"
 )
 
 var (

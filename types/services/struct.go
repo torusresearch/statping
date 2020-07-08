@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/statping/statping/types/checkins"
-	"github.com/statping/statping/types/failures"
-	"github.com/statping/statping/types/null"
+	"github.com/torusresearch/statping/types/checkins"
+	"github.com/torusresearch/statping/types/failures"
+	"github.com/torusresearch/statping/types/null"
 	"time"
 )
 

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/GeertJohan/go.rice"
 	"github.com/pkg/errors"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/utils"
 	"os"
 	"os/exec"
 	"path/filepath"

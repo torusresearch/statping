@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"errors"
-	"github.com/statping/statping/notifiers"
-	"github.com/statping/statping/types/configs"
-	"github.com/statping/statping/types/core"
-	"github.com/statping/statping/types/null"
-	"github.com/statping/statping/types/services"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/notifiers"
+	"github.com/torusresearch/statping/types/configs"
+	"github.com/torusresearch/statping/types/core"
+	"github.com/torusresearch/statping/types/null"
+	"github.com/torusresearch/statping/types/services"
+	"github.com/torusresearch/statping/utils"
 	"net/http"
 	"net/url"
 	"strconv"

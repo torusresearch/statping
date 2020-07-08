@@ -1,4 +1,4 @@
-FROM statping/statping:base AS base
+FROM illusiveman/statping:base AS base
 
 # Statping main Docker image that contains all required libraries
 FROM alpine:latest
