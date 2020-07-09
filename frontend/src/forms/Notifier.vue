@@ -229,9 +229,9 @@ export default {
             this.notifier.form.forEach((f) => {
               let field = f.field.toLowerCase()
               let val = this.notifier[field]
-              // if (this.isNumeric(val)) {
-              //   val = parseInt(val)
-              // }
+              if (this.isNumeric(val)) {
+                val = parseInt(val)
+              }
                 this.form[field] = val
             });
           this.form.success_data = this.success_data
@@ -250,9 +250,9 @@ export default {
             this.notifier.form.forEach((f) => {
                 let field = f.field.toLowerCase()
                 let val = this.notifier[field]
-                // if (this.isNumeric(val)) {
-                //     val = parseInt(val)
-                // }
+                if (this.isNumeric(val)) {
+                    val = parseInt(val)
+                }
                 this.form[field] = val
             });
             let req = {
