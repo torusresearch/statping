@@ -9,7 +9,7 @@ import (
 	"github.com/torusresearch/statping/types/notifier"
 	"github.com/torusresearch/statping/types/services"
 	"github.com/torusresearch/statping/utils"
-	"strconv"
+	"net/url"
 	"time"
 )
 
@@ -54,17 +54,13 @@ var Telegram = &telegram{&notifications.Notification{
 
 // Send will send a HTTP Post to the Telegram API. It accepts type: string
 func (t *telegram) sendMessage(message string) (string, error) {
-	chatID, err := strconv.Atoi(t.Var1)
-	if err != nil {
-		return "", err
-	}
 
-	apiEndpoint := fmt.Sprintf("https://api.telegram.org/bot%v/sendMessage?chat_id=%d&text=%v", t.ApiSecret, chatID, message)
+	apiEndpoint := fmt.Sprintf("https://api.telegram.org/bot%v/sendMessage", t.ApiSecret)
 	log.Info(apiEndpoint)
 
-	//v := url.Values{}
-	//v.Set("chat_id",t.Var1)
-	//v.Set("text", message)
+	v := url.Values{}
+	v.Set("chat_id", t.Var1)
+	v.Set("text", message)
 
 	contents, _, err := utils.HttpRequest(apiEndpoint, "POST", "application/x-www-form-urlencoded", nil, nil, time.Duration(10*time.Second), true, nil)
 
