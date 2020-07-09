@@ -10,6 +10,7 @@ import (
 	"github.com/torusresearch/statping/types/services"
 	"github.com/torusresearch/statping/utils"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -56,13 +57,12 @@ var Telegram = &telegram{&notifications.Notification{
 func (t *telegram) sendMessage(message string) (string, error) {
 
 	apiEndpoint := fmt.Sprintf("https://api.telegram.org/bot%v/sendMessage", t.ApiSecret)
-	log.Info(apiEndpoint)
 
 	v := url.Values{}
 	v.Set("chat_id", t.Var1)
 	v.Set("text", message)
 
-	contents, _, err := utils.HttpRequest(apiEndpoint, "POST", "application/x-www-form-urlencoded", nil, nil, time.Duration(10*time.Second), true, nil)
+	contents, _, err := utils.HttpRequest(apiEndpoint, "POST", "application/x-www-form-urlencoded", nil, strings.NewReader(v.Encode()), time.Duration(10*time.Second), true, nil)
 
 	success, _ := telegramSuccess(contents)
 	if !success {
