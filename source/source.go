@@ -20,7 +20,11 @@ var (
 )
 
 // Assets will load the Rice boxes containing the CSS, SCSS, JS, and HTML files.
-func Assets() error {
+func Assets(dev bool) error {
+	if dev {
+		return nil
+	}
+
 	if utils.Params.GetBool("DISABLE_HTTP") {
 		return nil
 	}

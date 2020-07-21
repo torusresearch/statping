@@ -30,7 +30,7 @@ var (
 
 func init() {
 	utils.InitLogs()
-	source.Assets()
+	source.Assets(false)
 	dir = utils.Directory
 	core.New("test")
 }

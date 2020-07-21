@@ -69,7 +69,7 @@ func main() {
 func start() {
 	go sigterm()
 	var err error
-	if err := source.Assets(); err != nil {
+	if err := source.Assets(dev); err != nil {
 		exit(err)
 	}
 

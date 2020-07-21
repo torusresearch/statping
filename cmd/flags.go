@@ -10,6 +10,7 @@ var (
 	configFile  string
 	verboseMode int
 	port        int
+	dev         bool
 )
 
 func parseFlags(cmd *cobra.Command) {
@@ -21,6 +22,9 @@ func parseFlags(cmd *cobra.Command) {
 
 	cmd.PersistentFlags().IntVarP(&verboseMode, "verbose", "v", 2, "verbose logging")
 	utils.Params.BindPFlag("verbose", cmd.PersistentFlags().Lookup("verbose"))
+
+	cmd.PersistentFlags().BoolVarP(&dev, "dev", "d", false, "development mode")
+	utils.Params.BindPFlag("dev", cmd.PersistentFlags().Lookup("dev"))
 
 	cmd.PersistentFlags().StringVarP(&configFile, "config", "c", utils.Directory+"/config.yml", "path to config.yml file")
 	utils.Params.BindPFlag("config", cmd.PersistentFlags().Lookup("config"))
