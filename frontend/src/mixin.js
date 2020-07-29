@@ -52,7 +52,7 @@ export default Vue.mixin({
     smallText(s) {
       const incidents = s.incidents
       if (s.online) {
-        return `Online, checked ${this.ago(s.last_success)} ago`
+        return `Checked ${this.ago(s.last_success)} ago`
       } else {
         const last = s.last_failure
         if (last) {
