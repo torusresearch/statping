@@ -2,12 +2,12 @@
     <div class="alert pb-4 pt-3 mt-5 mb-5" role="alert">
         <div class="d-flex">
             <h3 class="mb-3 torus-font-4">{{message.title}}</h3>
-            <span class="ml-auto alert_created torus-font-1">{{ message.created_at }}</span>
+            <span class="ml-auto alert_created torus-font-1">{{ niceDateTorus(message.created_at) }}</span>
         </div>
         <span class="mb-3 torus-font-2">{{message.description}}</span>
         <div class="mt-3 alert_dates">
-            <div class="torus-font-2">Start: {{niceDate(message.start_on)}}</div>
-            <div class="torus-font-2">End: {{niceDate(message.end_on)}}</div>
+            <div class="torus-font-2">Start: {{niceDateTorus(message.start_on)}}</div>
+            <div class="torus-font-2">End: {{niceDateTorus(message.end_on)}}</div>
         </div>
     </div>
 </template>

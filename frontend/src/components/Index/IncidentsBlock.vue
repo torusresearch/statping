@@ -4,7 +4,7 @@
             <span v-if="!incidentsView" class="braker mt-1 mb-3"></span>
             <div class="torus-font-4">
                 <div class="font-weight-bold">Incident: {{incident.title}}</div>
-                <span class="font-2 float-right">{{niceDate(incident.created_at)}}</span>
+                <span class="font-2 float-right">{{niceDateTorus(incident.created_at)}}</span>
             </div>
             <span class="torus-incident_info torus-font-4" v-html="incident.description"></span>
 

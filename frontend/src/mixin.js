@@ -43,6 +43,9 @@ export default Vue.mixin({
     niceDate(val) {
       return format(parseISO(val), "EEEE, MMM do h:mma")
     },
+    niceDateTorus(val) {
+      return format(parseISO(val), `do MMM HH:mma, EEEE`)
+    },
       parseISO(v) {
         return parseISO(v)
       },
