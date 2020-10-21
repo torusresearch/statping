@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Navbar v-if="isIndexPage" />
     <router-view :loaded="loaded"/>
       <Footer v-if="$route.path !== '/setup'"/>
   </div>
@@ -7,21 +8,26 @@
 
 <script>
   import Footer from "./components/Index/Footer";
+  import Navbar from "./components/Index/Navbar";
 
   export default {
   name: 'app',
   components: {
-    Footer
+    Footer,
+    Navbar
   },
   data () {
     return {
       loaded: false,
-        version: "",
+      version: ""
     }
   },
       computed: {
           core() {
             return this.$store.getters.core
+          },
+          isIndexPage() {
+            return this.$route.name === 'Index'
           }
       },
   async beforeMount() {
@@ -42,14 +48,14 @@
       this.loaded = true
     }
   },
-    async mounted() {
-          if (this.$route.path !== '/setup') {
-            if (this.$store.state.admin) {
-                this.logged_in = true
-                  // await this.$store.dispatch('loadAdmin')
-              }
-          }
+  async mounted() {
+    if (this.$route.path !== '/setup') {
+      if (this.$store.state.admin) {
+          this.logged_in = true
+            // await this.$store.dispatch('loadAdmin')
+        }
     }
+  },
 }
 </script>
 

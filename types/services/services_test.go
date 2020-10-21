@@ -33,7 +33,7 @@ var example = &Service{
 	VerifySSL:      null.NewNullBool(true),
 	Public:         null.NewNullBool(true),
 	GroupId:        1,
-	Permalink:      null.NewNullString("statping"),
+	Permalink:      "statping",
 	LastCheck:      utils.Now().Add(-5 * time.Second),
 	LastOffline:    utils.Now().Add(-5 * time.Second),
 	LastOnline:     utils.Now().Add(-60 * time.Second),
@@ -459,7 +459,7 @@ func TestServices(t *testing.T) {
 			VerifySSL:      null.NewNullBool(true),
 			Public:         null.NewNullBool(false),
 			GroupId:        1,
-			Permalink:      null.NewNullString("statping2"),
+			Permalink:      "statping2",
 		}
 		err := example.Create()
 		require.Nil(t, err)
