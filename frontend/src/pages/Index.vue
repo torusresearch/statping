@@ -27,9 +27,9 @@
             </div>
         </div>-->
 
-        <div>
+        <!-- <div>
             <Incidents :services="services" />
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -40,13 +40,13 @@ const MessageBlock = () => import("@/components/Index/MessageBlock");
 const ServiceBlock = () => import("@/components/Service/ServiceBlock");
 const GroupServiceFailures = () =>
     import("@/components/Index/GroupServiceFailures");
-const IncidentsBlock = () => import("@/components/Index/IncidentsBlock");
+// const IncidentsBlock = () => import("@/components/Index/IncidentsBlock");
 const Incidents = () => import("@/components/Index/Incidents");
 
 export default {
     name: "Index",
     components: {
-        IncidentsBlock,
+        // IncidentsBlock,
         GroupServiceFailures,
         ServiceBlock,
         MessageBlock,

@@ -1,20 +1,27 @@
 <template>
   <div id="app">
     <Navbar v-if="isIndexPage" />
-    <router-view :loaded="loaded"/>
-      <Footer v-if="$route.path !== '/setup'"/>
+    <router-view v-if="loaded" :loaded="loaded"/>
+    <div class="loader" v-else>
+      <template>
+        <vue-simple-spinner size="big" />
+      </template>
+    </div>
+      <!-- <Footer v-if="$route.path !== '/setup'"/> -->
   </div>
 </template>
 
 <script>
-  import Footer from "./components/Index/Footer";
+  // import Footer from "./components/Index/Footer";
   import Navbar from "./components/Index/Navbar";
+  import VueSimpleSpinner from 'vue-simple-spinner';
 
   export default {
   name: 'app',
   components: {
-    Footer,
-    Navbar
+    // Footer,
+    Navbar,
+    VueSimpleSpinner
   },
   data () {
     return {
@@ -62,4 +69,16 @@
 <style lang="scss">
     @import "./assets/css/bootstrap.min.css";
     @import "./assets/scss/main";
+</style>
+
+<style scoped>
+
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color:#fcfcfc;
+}
+
 </style>
