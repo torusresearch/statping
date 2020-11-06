@@ -236,6 +236,7 @@ export default {
             });
           this.form.success_data = this.success_data
           this.form.failure_data = this.failure_data
+            console.log(this.form)
             await Api.notifier_save(this.form)
             const notifiers = await Api.notifiers()
             await this.$store.commit('setNotifiers', notifiers)

@@ -1,9 +1,9 @@
 package source
 
 import (
-	"github.com/statping/statping/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/torusresearch/statping/utils"
 	"testing"
 )
 
@@ -14,7 +14,7 @@ var (
 func init() {
 	dir = utils.Directory
 	utils.InitLogs()
-	Assets()
+	Assets(false)
 	utils.DeleteDirectory(dir + "/assets")
 	dir = utils.Params.GetString("STATPING_DIR")
 }

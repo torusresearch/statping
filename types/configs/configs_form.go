@@ -2,7 +2,7 @@ package configs
 
 import (
 	"github.com/pkg/errors"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/utils"
 	"net/http"
 	"strconv"
 )

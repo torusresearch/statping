@@ -1,12 +1,12 @@
 package groups
 
 import (
-	"github.com/statping/statping/database"
-	"github.com/statping/statping/types/null"
-	"github.com/statping/statping/types/services"
-	"github.com/statping/statping/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/torusresearch/statping/database"
+	"github.com/torusresearch/statping/types/null"
+	"github.com/torusresearch/statping/types/services"
+	"github.com/torusresearch/statping/utils"
 	"testing"
 )
 

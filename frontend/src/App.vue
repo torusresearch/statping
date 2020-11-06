@@ -1,27 +1,40 @@
 <template>
   <div id="app">
-    <router-view :loaded="loaded"/>
-      <Footer v-if="$route.path !== '/setup'"/>
+    <Navbar v-if="isIndexPage" />
+    <router-view v-if="loaded" :loaded="loaded"/>
+    <div class="loader" v-else>
+      <template>
+        <vue-simple-spinner size="big" />
+      </template>
+    </div>
+      <!-- <Footer v-if="$route.path !== '/setup'"/> -->
   </div>
 </template>
 
 <script>
-  import Footer from "./components/Index/Footer";
+  // import Footer from "./components/Index/Footer";
+  import Navbar from "./components/Index/Navbar";
+  import VueSimpleSpinner from 'vue-simple-spinner';
 
   export default {
   name: 'app',
   components: {
-    Footer
+    // Footer,
+    Navbar,
+    VueSimpleSpinner
   },
   data () {
     return {
       loaded: false,
-        version: "",
+      version: ""
     }
   },
       computed: {
           core() {
             return this.$store.getters.core
+          },
+          isIndexPage() {
+            return this.$route.name === 'Index'
           }
       },
   async beforeMount() {
@@ -42,18 +55,30 @@
       this.loaded = true
     }
   },
-    async mounted() {
-          if (this.$route.path !== '/setup') {
-            if (this.$store.state.admin) {
-                this.logged_in = true
-                  // await this.$store.dispatch('loadAdmin')
-              }
-          }
+  async mounted() {
+    if (this.$route.path !== '/setup') {
+      if (this.$store.state.admin) {
+          this.logged_in = true
+            // await this.$store.dispatch('loadAdmin')
+        }
     }
+  },
 }
 </script>
 
 <style lang="scss">
     @import "./assets/css/bootstrap.min.css";
     @import "./assets/scss/main";
+</style>
+
+<style scoped>
+
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color:#fcfcfc;
+}
+
 </style>

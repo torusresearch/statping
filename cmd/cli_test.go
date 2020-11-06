@@ -2,9 +2,9 @@ package main
 
 import (
 	"bytes"
-	"github.com/statping/statping/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/torusresearch/statping/utils"
 	"io/ioutil"
 	"testing"
 )

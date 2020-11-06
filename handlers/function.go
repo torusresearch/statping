@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"github.com/statping/statping/source"
-	"github.com/statping/statping/types/core"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/source"
+	"github.com/torusresearch/statping/types/core"
+	"github.com/torusresearch/statping/utils"
 	"html/template"
 	"net/http"
 	"net/url"

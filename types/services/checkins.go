@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/statping/statping/types/checkins"
+	"github.com/torusresearch/statping/types/checkins"
 )
 
 // CheckinProcess runs the checkin routine for each checkin attached to service

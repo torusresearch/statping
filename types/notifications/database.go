@@ -2,7 +2,7 @@ package notifications
 
 import (
 	"errors"
-	"github.com/statping/statping/database"
+	"github.com/torusresearch/statping/database"
 )
 
 var (

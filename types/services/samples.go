@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/statping/statping/types/null"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/null"
+	"github.com/torusresearch/statping/utils"
 	"time"
 )
 
@@ -27,7 +27,7 @@ func Example(online bool) Service {
 		TLSCertKey:          null.NullString{},
 		TLSCertRoot:         null.NullString{},
 		Headers:             null.NullString{},
-		Permalink:           null.NewNullString("example-service"),
+		Permalink:           "example-service",
 		Redirect:            null.NewNullBool(true),
 		CreatedAt:           utils.Now().Add(-23 * time.Hour),
 		UpdatedAt:           utils.Now().Add(-23 * time.Hour),
@@ -73,7 +73,7 @@ func Samples() error {
 		Order:          1,
 		GroupId:        1,
 		Public:         null.NewNullBool(true),
-		Permalink:      null.NewNullString("google"),
+		Permalink:      "google",
 		VerifySSL:      null.NewNullBool(true),
 		Redirect:       null.NewNullBool(true),
 		NotifyAfter:    3,
@@ -85,7 +85,7 @@ func Samples() error {
 
 	s2 := &Service{
 		Name:           "Statping Github",
-		Domain:         "https://github.com/statping/statping",
+		Domain:         "https://github.com/torusresearch/statping",
 		ExpectedStatus: 200,
 		Interval:       30,
 		Type:           "http",
@@ -93,7 +93,7 @@ func Samples() error {
 		Timeout:        20,
 		Order:          2,
 		Public:         null.NewNullBool(true),
-		Permalink:      null.NewNullString("statping_github"),
+		Permalink:      "statping_github",
 		VerifySSL:      null.NewNullBool(true),
 		NotifyAfter:    1,
 		CreatedAt:      createdOn,

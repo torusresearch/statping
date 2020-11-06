@@ -2,8 +2,8 @@ package notifiers
 
 import (
 	"github.com/magiconair/properties/assert"
-	"github.com/statping/statping/types/failures"
-	"github.com/statping/statping/types/services"
+	"github.com/torusresearch/statping/types/failures"
+	"github.com/torusresearch/statping/types/services"
 	"testing"
 )
 

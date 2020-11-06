@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/statping/statping/types/failures"
-	"github.com/statping/statping/types/notifications"
-	"github.com/statping/statping/types/notifier"
-	"github.com/statping/statping/types/services"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/failures"
+	"github.com/torusresearch/statping/types/notifications"
+	"github.com/torusresearch/statping/types/notifier"
+	"github.com/torusresearch/statping/types/services"
+	"github.com/torusresearch/statping/utils"
 	"net/url"
 	"strings"
 	"time"
@@ -55,6 +55,7 @@ var Telegram = &telegram{&notifications.Notification{
 
 // Send will send a HTTP Post to the Telegram API. It accepts type: string
 func (t *telegram) sendMessage(message string) (string, error) {
+
 	apiEndpoint := fmt.Sprintf("https://api.telegram.org/bot%v/sendMessage", t.ApiSecret)
 
 	v := url.Values{}

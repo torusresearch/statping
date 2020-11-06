@@ -3,7 +3,7 @@
 package main
 
 import (
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/utils"
 	"io/ioutil"
 	"log"
 	"os"
@@ -24,7 +24,7 @@ func main() {
 	var compiled string
 
 	utils.InitLogs()
-	utils.Command("git clone https://github.com/statping/statping.wiki.git")
+	utils.Command("git clone https://github.com/torusresearch/statping.wiki.git")
 
 	pages := []string{"Types-of-Monitoring", "Features", "Start-Statping", "Linux", "Mac", "Windows", "AWS-EC2", "Docker", "Mobile-App", "Heroku", "API", "Makefile",
 		"Notifiers", "Notifier-Events", "Notifier-Example", "Prometheus-Exporter", "SSL", "Config-with-.env-File", "Static-Export", "Statping-Plugins", "Statuper", "Build-and-Test", "Contributing", "PGP-Signature", "Testing", "Deployment"}

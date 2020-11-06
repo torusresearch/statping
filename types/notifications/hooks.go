@@ -1,8 +1,8 @@
 package notifications
 
 import (
-	"github.com/statping/statping/types/metrics"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/metrics"
+	"github.com/torusresearch/statping/utils"
 )
 
 // AfterFind for Notification will set the timezone

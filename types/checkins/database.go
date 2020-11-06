@@ -1,9 +1,9 @@
 package checkins
 
 import (
-	"github.com/statping/statping/database"
-	"github.com/statping/statping/types/metrics"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/database"
+	"github.com/torusresearch/statping/types/metrics"
+	"github.com/torusresearch/statping/utils"
 )
 
 var db database.Database

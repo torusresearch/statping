@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/statping/statping/types/checkins"
-	"github.com/statping/statping/types/errors"
-	"github.com/statping/statping/types/services"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/checkins"
+	"github.com/torusresearch/statping/types/errors"
+	"github.com/torusresearch/statping/types/services"
+	"github.com/torusresearch/statping/utils"
 	"net"
 	"net/http"
 )

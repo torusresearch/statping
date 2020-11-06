@@ -3,7 +3,7 @@ package handlers
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/utils"
 	"net/http"
 )
 

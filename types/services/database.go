@@ -2,10 +2,10 @@ package services
 
 import (
 	"fmt"
-	"github.com/statping/statping/database"
-	"github.com/statping/statping/types/errors"
-	"github.com/statping/statping/types/metrics"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/database"
+	"github.com/torusresearch/statping/types/errors"
+	"github.com/torusresearch/statping/types/metrics"
+	"github.com/torusresearch/statping/utils"
 	"sort"
 )
 

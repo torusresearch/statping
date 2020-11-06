@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"crypto/subtle"
-	"github.com/statping/statping/types/core"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/core"
+	"github.com/torusresearch/statping/utils"
 	"net/http"
 	"strings"
 )

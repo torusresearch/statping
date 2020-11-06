@@ -1,16 +1,16 @@
 <template>
     <div>
-        <div class="d-flex mt-3 mb-2">
-            <div class="flex-fill service_day" v-for="(d, index) in failureData" :class="{'mini_error': d.amount > 0, 'mini_success': d.amount === 0}">
-                <span v-if="d.amount != 0" class="small">{{d.amount}}</span>
+        <div class="d-flex mt-2">
+            <div class="flex-fill service_day" v-for="(d, index) in failureData" :class="{'mini_error': d.amount > 0, 'mini_success': d.amount === 0}" :key="index">
+                <!-- <span v-if="d.amount != 0" class="small">{{d.amount}}</span> -->
             </div>
         </div>
-        <div class="row mt-2">
-            <div class="col-3 text-left font-2 text-muted">30 Days Ago</div>
-            <div class="col-6 text-center font-2" :class="{'text-muted': service.online, 'text-danger': !service.online}">
-               {{service_txt}}
-            </div>
-            <div class="col-3 text-right font-2 text-muted">Today</div>
+        <div class="row">
+            <div class="col-6 text-left service_note text-muted">30 Days Ago</div>
+            <div class="col-6 text-right service_note text-muted">Today</div>
+        </div>
+        <div class="row mt-1">
+          <div class="col-8 text-left service_note_2" :class="{'text-muted': service.online, 'text-danger': !service.online}">{{service_txt}}</div>
         </div>
     </div>
 </template>
@@ -57,4 +57,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.service_day {
+  height: 50px;
+}
+.service_note {
+  font-size: 0.625rem;
+}
+.service_note_2 {
+  font-size: 0.75rem;
+}
 </style>

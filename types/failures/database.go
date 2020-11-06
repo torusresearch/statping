@@ -1,8 +1,8 @@
 package failures
 
 import (
-	"github.com/statping/statping/database"
-	"github.com/statping/statping/types/metrics"
+	"github.com/torusresearch/statping/database"
+	"github.com/torusresearch/statping/types/metrics"
 )
 
 var db database.Database

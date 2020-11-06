@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/statping/statping/types/core"
-	"github.com/statping/statping/types/errors"
-	"github.com/statping/statping/types/metrics"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/core"
+	"github.com/torusresearch/statping/types/errors"
+	"github.com/torusresearch/statping/types/metrics"
+	"github.com/torusresearch/statping/utils"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -184,6 +184,7 @@ func DecodeJSON(r *http.Request, obj interface{}) error {
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&obj)
 	if err != nil {
+		log.Error(err.Error())
 		return errors.DecodeJSON
 	}
 	return r.Body.Close()

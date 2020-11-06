@@ -1,15 +1,15 @@
 package notifiers
 
 import (
-	"github.com/statping/statping/database"
-	"github.com/statping/statping/types/core"
-	"github.com/statping/statping/types/failures"
-	"github.com/statping/statping/types/notifications"
-	"github.com/statping/statping/types/null"
-	"github.com/statping/statping/types/services"
-	"github.com/statping/statping/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/torusresearch/statping/database"
+	"github.com/torusresearch/statping/types/core"
+	"github.com/torusresearch/statping/types/failures"
+	"github.com/torusresearch/statping/types/notifications"
+	"github.com/torusresearch/statping/types/null"
+	"github.com/torusresearch/statping/types/services"
+	"github.com/torusresearch/statping/utils"
 	"testing"
 )
 

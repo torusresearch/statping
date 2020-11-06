@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/statping/statping/types/errors"
-	"github.com/statping/statping/types/messages"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/errors"
+	"github.com/torusresearch/statping/types/messages"
+	"github.com/torusresearch/statping/utils"
 	"net/http"
 )
 

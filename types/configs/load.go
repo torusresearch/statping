@@ -1,8 +1,8 @@
 package configs
 
 import (
-	"github.com/statping/statping/types/errors"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/errors"
+	"github.com/torusresearch/statping/utils"
 	"gopkg.in/yaml.v2"
 	"os"
 )

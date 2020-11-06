@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
-	"github.com/statping/statping/source"
-	"github.com/statping/statping/types/checkins"
-	"github.com/statping/statping/types/configs"
-	"github.com/statping/statping/types/core"
-	"github.com/statping/statping/types/groups"
-	"github.com/statping/statping/types/messages"
-	"github.com/statping/statping/types/services"
-	"github.com/statping/statping/types/users"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/source"
+	"github.com/torusresearch/statping/types/checkins"
+	"github.com/torusresearch/statping/types/configs"
+	"github.com/torusresearch/statping/types/core"
+	"github.com/torusresearch/statping/types/groups"
+	"github.com/torusresearch/statping/types/messages"
+	"github.com/torusresearch/statping/types/services"
+	"github.com/torusresearch/statping/types/users"
+	"github.com/torusresearch/statping/utils"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -25,7 +25,7 @@ func assetsCli() error {
 	if err := utils.InitLogs(); err != nil {
 		return err
 	}
-	if err := source.Assets(); err != nil {
+	if err := source.Assets(dev); err != nil {
 		return err
 	}
 	if err := source.CreateAllAssets(dir); err != nil {
@@ -43,7 +43,7 @@ func exportCli(args []string) error {
 	if err := utils.InitLogs(); err != nil {
 		return err
 	}
-	if err := source.Assets(); err != nil {
+	if err := source.Assets(dev); err != nil {
 		return err
 	}
 	config, err := configs.LoadConfigs(configFile)
@@ -70,7 +70,7 @@ func sassCli() error {
 	if err := utils.InitLogs(); err != nil {
 		return err
 	}
-	if err := source.Assets(); err != nil {
+	if err := source.Assets(dev); err != nil {
 		return err
 	}
 	if err := source.CompileSASS(source.DefaultScss...); err != nil {
@@ -138,7 +138,7 @@ func onceCli() error {
 	if err := utils.InitLogs(); err != nil {
 		return err
 	}
-	if err := source.Assets(); err != nil {
+	if err := source.Assets(dev); err != nil {
 		return err
 	}
 	log.Infoln("Running 1 time and saving to database...")

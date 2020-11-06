@@ -3,8 +3,8 @@ package database
 import (
 	"errors"
 	"fmt"
-	"github.com/statping/statping/types"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types"
+	"github.com/torusresearch/statping/utils"
 	"net/http"
 	"net/url"
 	"strconv"

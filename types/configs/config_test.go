@@ -1,8 +1,8 @@
 package configs
 
 import (
-	"github.com/statping/statping/utils"
 	"github.com/stretchr/testify/require"
+	"github.com/torusresearch/statping/utils"
 	"testing"
 )
 

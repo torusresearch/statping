@@ -3,10 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/statping/statping/source"
-	"github.com/statping/statping/types/errors"
-	"github.com/statping/statping/types/users"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/source"
+	"github.com/torusresearch/statping/types/errors"
+	"github.com/torusresearch/statping/types/users"
+	"github.com/torusresearch/statping/utils"
 	"net/http"
 	"os"
 )

@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/statping/statping/types/metrics"
+	"github.com/torusresearch/statping/types/metrics"
 	"io"
 	"io/ioutil"
 	"net"

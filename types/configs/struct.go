@@ -1,6 +1,6 @@
 package configs
 
-import "github.com/statping/statping/database"
+import "github.com/torusresearch/statping/database"
 
 const SqliteFilename = "statping.db"
 

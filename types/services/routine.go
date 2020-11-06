@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/statping/statping/types/metrics"
+	"github.com/torusresearch/statping/types/metrics"
 	"google.golang.org/grpc"
 	"net"
 	"net/http"
@@ -14,9 +14,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/statping/statping/types/failures"
-	"github.com/statping/statping/types/hits"
-	"github.com/statping/statping/utils"
+	"github.com/torusresearch/statping/types/failures"
+	"github.com/torusresearch/statping/types/hits"
+	"github.com/torusresearch/statping/utils"
 )
 
 // checkServices will start the checking go routine for each service
