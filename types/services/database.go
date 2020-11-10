@@ -67,6 +67,15 @@ func AllInOrder() []Service {
 	return services
 }
 
+func AllMetadataInOrder() []Service {
+	var services []Service
+	for _, service := range allServices {
+		services = append(services, *service)
+	}
+	sort.Sort(ServiceOrder(services))
+	return services
+}
+
 func (s *Service) Create() error {
 	err := db.Create(s)
 	if err.Error() != nil {

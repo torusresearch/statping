@@ -41,6 +41,10 @@ class Api {
     return axios.get('api/services').then(response => (response.data))
   }
 
+  async servicesMetadata() {
+    return axios.get('api/services/metadata').then(response => (response.data))
+  }
+
   async service(id) {
     return axios.get('api/services/' + id).then(response => (response.data))
   }

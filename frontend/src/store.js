@@ -30,7 +30,8 @@ export default new Vuex.Store({
             notifiers: [],
             checkins: [],
             admin: false,
-            user: false
+            user: false,
+            serviceMetadata: []
         },
     getters: {
         hasAllData: state => state.hasAllData,
@@ -55,6 +56,8 @@ export default new Vuex.Store({
         groupsInOrder: state => state.groups.sort((a, b) => a.order_id - b.order_id),
         groupsClean: state => state.groups.filter(g => g.name !== '').sort((a, b) => a.order_id - b.order_id),
         groupsCleanInOrder: state => state.groups.filter(g => g.name !== '').sort((a, b) => a.order_id - b.order_id).sort((a, b) => a.order_id - b.order_id),
+
+        serviceMetadataInOrder: state => state.serviceMetadata.sort((a, b) => a.order_id - b.order_id),
 
         serviceCheckins: (state) => (id) => {
             return state.checkins.filter(c => c.service_id === id)
@@ -154,7 +157,7 @@ export default new Vuex.Store({
         async loadRequired(context) {
             const groups = await Api.groups()
             context.commit("setGroups", groups);
-            const services = await Api.services()
+            const services = await Api.servicesMetadata()
             context.commit("setServices", services);
             const messages = await Api.messages()
             context.commit("setMessages", messages)

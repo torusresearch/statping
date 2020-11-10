@@ -225,6 +225,17 @@ func apiAllServicesHandler(r *http.Request) interface{} {
 	return srvs
 }
 
+func apiAllMetadataServicesHandler(r *http.Request) interface{} {
+	var srvs []services.Service
+	for _, v := range services.AllMetadataInOrder() {
+		if !v.Public.Bool && !IsUser(r) {
+			continue
+		}
+		srvs = append(srvs, v)
+	}
+	return srvs
+}
+
 func servicesDeleteFailuresHandler(w http.ResponseWriter, r *http.Request) {
 	service, err := findService(r)
 	if err != nil {

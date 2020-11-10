@@ -68,12 +68,12 @@ export default {
         groups() {
             return this.$store.getters.groupsInOrder;
         },
-        services() {
-            return this.$store.getters.servicesInOrder;
-        },
-        services_no_group() {
-            return this.$store.getters.servicesNoGroup;
-        },
+        // services() {
+        //     return this.$store.getters.servicesInOrder;
+        // },
+        // services_no_group() {
+        //     return this.$store.getters.servicesNoGroup;
+        // },
     },
     async created() {
         this.logged_in = this.loggedIn();
