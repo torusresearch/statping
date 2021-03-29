@@ -3,6 +3,7 @@ package services
 import (
 	"bytes"
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/torusresearch/statping/types/metrics"
@@ -287,6 +288,12 @@ func CheckHttp(s *Service, record bool) (*Service, error) {
 
 	metrics.Gauge("status_code", float64(res.StatusCode), s.Name)
 
+	if s.ExpectedStatus != res.StatusCode {
+		if record {
+			recordFailure(s, fmt.Sprintf("HTTP Status Code %v did not match %v", res.StatusCode, s.ExpectedStatus))
+		}
+		return s, err
+	}
 	if s.Expected.String != "" {
 		match, err := regexp.MatchString(s.Expected.String, string(content))
 		if err != nil {
@@ -299,12 +306,22 @@ func CheckHttp(s *Service, record bool) (*Service, error) {
 			return s, err
 		}
 	}
-	if s.ExpectedStatus != res.StatusCode {
-		if record {
-			recordFailure(s, fmt.Sprintf("HTTP Status Code %v did not match %v", res.StatusCode, s.ExpectedStatus))
-		}
-		return s, err
+
+	// Replace the latency with the one the health check endpoint is returning
+	var responseJSON map[string]interface{}
+	err = json.Unmarshal(content, &responseJSON)
+	if err != nil {
+		log.Debug("couldn't unmarshal response")
 	}
+	if len(responseJSON) > 0 {
+		if responseJSON["latency"] != nil {
+			latency, ok := responseJSON["latency"].(float64)
+			if ok {
+				s.Latency = int64(latency)
+			}
+		}
+	}
+
 	if record {
 		recordSuccess(s)
 	}

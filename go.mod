@@ -14,7 +14,6 @@ require (
 	github.com/go-mail/mail v2.3.1+incompatible
 	github.com/golang/protobuf v1.3.5 // indirect
 	github.com/gorilla/mux v1.7.4
-	github.com/gorilla/securecookie v1.1.1
 	github.com/hako/durafmt v0.0.0-20200605151348-3a43fc422dd9
 	github.com/jinzhu/gorm v1.9.12
 	github.com/magiconair/properties v1.8.1
@@ -23,7 +22,6 @@ require (
 	github.com/pelletier/go-toml v1.7.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v0.9.3
-	github.com/russross/blackfriday/v2 v2.0.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
