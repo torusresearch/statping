@@ -317,7 +317,7 @@ func CheckHttp(s *Service, record bool) (*Service, error) {
 		if responseJSON["latency"] != nil {
 			latency, ok := responseJSON["latency"].(float64)
 			if ok {
-				s.Latency = int64(latency)
+				s.Latency = int64(latency) * 1000 // convert to microseconds
 			}
 		}
 	}
