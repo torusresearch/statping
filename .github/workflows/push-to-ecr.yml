@@ -25,7 +25,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: torus/statping
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA .
+          docker build -f Dockerfile.base -t $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA .
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
       - name: Push latest tag
@@ -35,6 +35,6 @@ jobs:
           ECR_REPOSITORY: torus/statping
           IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -f Dockerfile.base -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
