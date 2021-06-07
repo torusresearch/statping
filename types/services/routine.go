@@ -349,7 +349,6 @@ func recordSuccess(s *Service) {
 	metrics.Gauge("online", 1., s.Name, s.Type)
 	metrics.Inc("success", s.Name)
 	sendSuccess(s)
-	s.SuccessNotified = true
 }
 
 func AddNotifier(n ServiceNotifier) {
@@ -373,7 +372,7 @@ func sendSuccess(s *Service) {
 			if _, err := n.OnSuccess(*s); err != nil {
 				notif.Logger().Errorln(err)
 			}
-			s.UserNotified = true
+			s.UserNotified = false
 			s.SuccessNotified = true
 			//s.UpdateNotify.Bool
 		}
@@ -426,7 +425,7 @@ func sendFailure(s *Service, f *failures.Failure) {
 					notif.Logger().WithField("failure", f.Issue).Errorln(err)
 				}
 				s.UserNotified = true
-				s.SuccessNotified = true
+				s.SuccessNotified = false
 				//s.UpdateNotify.Bool
 			}
 		}
