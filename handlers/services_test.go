@@ -6,10 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/torusresearch/statping/types"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
+	"net/http/httptest"
 	"testing"
 	"time"
 )
@@ -60,11 +57,11 @@ func TestApiServiceRoutes(t *testing.T) {
 			Method:           "GET",
 			ExpectedContains: []string{`"name":"Google"`},
 			ExpectedStatus:   200,
-			ResponseLen:      6,
+			ResponseLen:      7,
 			BeforeTest:       SetTestENV,
 			FuncTest: func(t *testing.T) error {
 				count := len(services.Services())
-				if count != 6 {
+				if count != 7 {
 					return errors.Errorf("incorrect services count: %d", count)
 				}
 				return nil
@@ -76,11 +73,11 @@ func TestApiServiceRoutes(t *testing.T) {
 			Method:           "GET",
 			ExpectedContains: []string{`"name":"Google"`},
 			ExpectedStatus:   200,
-			ResponseLen:      5,
+			ResponseLen:      6,
 			BeforeTest:       UnsetTestENV,
 			FuncTest: func(t *testing.T) error {
 				count := len(services.Services())
-				if count != 6 {
+				if count != 7 {
 					return errors.Errorf("incorrect services count: %d", count)
 				}
 				return nil
@@ -214,7 +211,7 @@ func TestApiServiceRoutes(t *testing.T) {
 			URL:            "/api/services/1/uptime_data" + startEndQuery,
 			Method:         "GET",
 			ExpectedStatus: 200,
-			ResponseFunc: func(t *testing.T, resp []byte) error {
+			ResponseFunc: func(req *httptest.ResponseRecorder, t *testing.T, resp []byte) error {
 				var uptime *services.UptimeSeries
 				if err := json.Unmarshal(resp, &uptime); err != nil {
 					return err
@@ -260,10 +257,10 @@ func TestApiServiceRoutes(t *testing.T) {
 					"order_id": 0
 				}`,
 			ExpectedStatus:   200,
-			ExpectedContains: []string{Success, `"type":"service","method":"create"`, `"public":false`, `"group_id":1`},
+			ExpectedContains: []string{Success, MethodCreate, `"type":"service",`, `"public":false`, `"group_id":1`},
 			FuncTest: func(t *testing.T) error {
 				count := len(services.Services())
-				if count != 7 {
+				if count != 8 {
 					return errors.Errorf("incorrect services count: %d", count)
 				}
 				return nil
@@ -325,7 +322,27 @@ func TestApiServiceRoutes(t *testing.T) {
 			ExpectedContains: []string{Success, MethodDelete},
 			FuncTest: func(t *testing.T) error {
 				count := len(services.Services())
-				if count != 6 {
+				if count != 7 {
+					return errors.Errorf("incorrect services count: %d", count)
+				}
+				return nil
+			},
+			SecureRoute: true,
+		},
+		{
+			Name:           "Statping Patch Static Service",
+			URL:            "/api/services/7",
+			Method:         "PATCH",
+			ExpectedStatus: 200,
+			Body: `{
+						"online": false,
+						"latency": 30500,
+						"issue": "This is a failure string you can create"
+					},`,
+			ExpectedContains: []string{Success, MethodUpdate},
+			FuncTest: func(t *testing.T) error {
+				count := len(services.Services())
+				if count != 7 {
 					return errors.Errorf("incorrect services count: %d", count)
 				}
 				return nil

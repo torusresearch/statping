@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"github.com/torusresearch/statping/utils"
 	"sync"
 	"time"
+
+	"github.com/statping/statping/utils"
 )
 
 var CacheStorage Cacher

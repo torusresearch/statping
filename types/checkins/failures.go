@@ -1,12 +1,14 @@
 package checkins
 
 import (
-	"github.com/torusresearch/statping/types/failures"
 	"time"
+
+	"github.com/statping/statping/types/failures"
 )
 
 func (c *Checkin) CreateFailure(f *failures.Failure) error {
 	f.Checkin = c.Id
+	c.Failing = true
 	return failures.DB().Create(f).Error()
 }
 

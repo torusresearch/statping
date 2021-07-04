@@ -1,8 +1,8 @@
 package core
 
 import (
-	"github.com/torusresearch/statping/types/null"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/types/null"
+	"github.com/statping/statping/utils"
 )
 
 func Example() *Core {
@@ -41,6 +41,8 @@ func Samples() error {
 		MigrationId: utils.Now().Unix(),
 		Language:    utils.Params.GetString("LANGUAGE"),
 		OAuth:       oauth,
+		Version:     utils.Params.GetString("VERSION"),
+		Commit:      utils.Params.GetString("COMMIT"),
 	}
 
 	return core.Create()

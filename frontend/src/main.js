@@ -8,9 +8,10 @@ import VueI18n from 'vue-i18n'
 import router from './routes'
 import "./mixin"
 import "./icons"
-const App = () => import('@/App.vue')
 import store from './store'
 import language from './languages'
+
+const App = () => import(/* webpackChunkName: "index" */ '@/App.vue')
 
 Vue.component('apexchart', VueApexCharts)
 
@@ -27,7 +28,10 @@ const i18n = new VueI18n({
 
 Vue.$cookies.config('3d')
 
-Vue.config.productionTip = false
+Vue.config.productionTip = process.env.NODE_ENV !== 'production'
+Vue.config.devtools = process.env.NODE_ENV !== 'production'
+Vue.config.performance = process.env.NODE_ENV !== 'production'
+
 new Vue({
   router,
   store,

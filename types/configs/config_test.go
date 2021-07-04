@@ -1,9 +1,11 @@
 package configs
 
 import (
-	"github.com/stretchr/testify/require"
-	"github.com/torusresearch/statping/utils"
 	"testing"
+
+	"github.com/statping/statping/utils"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func init() {
@@ -50,4 +52,10 @@ func TestPostgresConfig(t *testing.T) {
 
 	err := Connect(postgres, false)
 	require.Nil(t, err)
+}
+
+func TestFileSQLFile(t *testing.T) {
+	file, err := findSQLin(utils.Directory)
+	require.Nil(t, err)
+	assert.Equal(t, "statping.db", file)
 }

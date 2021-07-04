@@ -1,12 +1,13 @@
 package messages
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/utils"
 	"testing"
 	"time"
+
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/utils"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var example = &Message{
@@ -71,6 +72,11 @@ func TestDelete(t *testing.T) {
 
 	all = All()
 	assert.Len(t, all, 1)
+}
+
+func TestSamples(t *testing.T) {
+	require.Nil(t, Samples())
+	assert.Len(t, All(), 3)
 }
 
 func TestClose(t *testing.T) {

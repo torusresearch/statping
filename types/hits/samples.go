@@ -6,8 +6,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/mattn/go-sqlite3"
 	gormbulk "github.com/t-tiger/gorm-bulk-insert/v2"
-	"github.com/torusresearch/statping/types"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/types"
+	"github.com/statping/statping/utils"
 	"time"
 )
 

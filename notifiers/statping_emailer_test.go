@@ -1,17 +1,18 @@
 package notifiers
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/types/notifications"
-	"github.com/torusresearch/statping/types/null"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
 	"testing"
 	"time"
+
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/types/notifications"
+	"github.com/statping/statping/types/null"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var (
@@ -21,6 +22,8 @@ var (
 func TestStatpingEmailerNotifier(t *testing.T) {
 	err := utils.InitLogs()
 	require.Nil(t, err)
+
+	t.Parallel()
 	db, err := database.OpenTester()
 	require.Nil(t, err)
 	db.AutoMigrate(&notifications.Notification{})
@@ -28,7 +31,7 @@ func TestStatpingEmailerNotifier(t *testing.T) {
 	core.Example()
 
 	testEmail = utils.Params.GetString("TEST_EMAIL")
-	statpingMailer.Host = testEmail
+	statpingMailer.Host = null.NewNullString(testEmail)
 	statpingMailer.Enabled = null.NewNullBool(true)
 
 	if testEmail == "" {
@@ -37,12 +40,12 @@ func TestStatpingEmailerNotifier(t *testing.T) {
 	}
 
 	t.Run("Load statping emailer", func(t *testing.T) {
-		statpingMailer.Host = testEmail
+		statpingMailer.Host = null.NewNullString(testEmail)
 		statpingMailer.Delay = time.Duration(100 * time.Millisecond)
 		statpingMailer.Limits = 3
 		Add(statpingMailer)
 		assert.Equal(t, "Hunter Long", statpingMailer.Author)
-		assert.Equal(t, testEmail, statpingMailer.Host)
+		assert.Equal(t, testEmail, statpingMailer.Host.String)
 	})
 
 	t.Run("statping emailer Within Limits", func(t *testing.T) {

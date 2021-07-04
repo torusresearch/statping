@@ -2,7 +2,7 @@ package configs
 
 import (
 	"fmt"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/utils"
 	"os"
 )
 

@@ -1,8 +1,8 @@
 package failures
 
 import (
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/metrics"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/metrics"
 )
 
 var db database.Database
@@ -29,12 +29,6 @@ func (f *Failure) AfterDelete() {
 
 func (f *Failure) AfterCreate() {
 	metrics.Query("failure", "create")
-}
-
-func All() []*Failure {
-	var failures []*Failure
-	db.Find(&failures)
-	return failures
 }
 
 func (f *Failure) Create() error {

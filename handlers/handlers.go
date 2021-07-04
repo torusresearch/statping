@@ -3,19 +3,20 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/torusresearch/statping/types/errors"
+	"github.com/statping/statping/types/errors"
 	"html/template"
 	"net/http"
 	"path"
 	"time"
 
-	"github.com/torusresearch/statping/source"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/source"
+	"github.com/statping/statping/utils"
 )
 
 const (
 	cookieName = "statping_auth"
-	timeout    = time.Second * 30
+
+	timeout = time.Second * 30
 )
 
 var (
@@ -24,13 +25,10 @@ var (
 	usingSSL   bool
 	mainTmpl   = `{{define "main" }} {{ template "base" . }} {{ end }}`
 	templates  = []string{"base.gohtml"}
-	httpError  chan error
 )
 
 func StopHTTPServer(err error) {
 	log.Infoln("Stopping HTTP Server")
-	httpError <- err
-	close(httpError)
 }
 
 // RunHTTPServer will start a HTTP server on a specific IP and port
@@ -54,19 +52,13 @@ func RunHTTPServer() error {
 
 	router = Router()
 	resetCookies()
-	httpError = make(chan error)
 
-	if usingSSL {
-		go startSSLServer(ip)
+	if utils.Params.GetBool("LETSENCRYPT_ENABLE") {
+		return startLetsEncryptServer(ip)
+	} else if usingSSL {
+		return startSSLServer(ip)
 	} else {
-		go startServer(host)
-	}
-
-	for {
-		select {
-		case err := <-httpError:
-			return err
-		}
+		return startServer(host)
 	}
 }
 

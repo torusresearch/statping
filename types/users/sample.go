@@ -1,7 +1,7 @@
 package users
 
 import (
-	"github.com/torusresearch/statping/types/null"
+	"github.com/statping/statping/types/null"
 )
 
 func Samples() error {
@@ -10,6 +10,7 @@ func Samples() error {
 		Username: "testadmin",
 		Password: "password123",
 		Email:    "info@betatude.com",
+		Scopes:   "admin",
 		Admin:    null.NewNullBool(true),
 	}
 
@@ -21,6 +22,7 @@ func Samples() error {
 		Username: "testadmin2",
 		Password: "password123",
 		Email:    "info@adminhere.com",
+		Scopes:   "admin",
 		Admin:    null.NewNullBool(true),
 	}
 

@@ -1,8 +1,9 @@
 package services
 
 import (
-	"github.com/torusresearch/statping/types/hits"
 	"time"
+
+	"github.com/statping/statping/types/hits"
 )
 
 func (s *Service) HitsColumnID() (string, int64) {

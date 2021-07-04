@@ -1,14 +1,15 @@
 package handlers
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/errors"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/types/hits"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/errors"
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/types/hits"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
 )
 
 type serviceOrder struct {
@@ -74,6 +75,46 @@ func apiCreateServiceHandler(w http.ResponseWriter, r *http.Request) {
 	sendJsonAction(service, "create", w, r)
 }
 
+type servicePatchReq struct {
+	Online  bool   `json:"online"`
+	Issue   string `json:"issue,omitempty"`
+	Latency int64  `json:"latency,omitempty"`
+}
+
+func apiServicePatchHandler(w http.ResponseWriter, r *http.Request) {
+	service, err := findService(r)
+	if err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	var req servicePatchReq
+	if err := DecodeJSON(r, &req); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+
+	service.Online = req.Online
+	service.Latency = req.Latency
+
+	issueDefault := "Service was triggered to be offline"
+	if req.Issue != "" {
+		issueDefault = req.Issue
+	}
+
+	if !req.Online {
+		services.RecordFailure(service, issueDefault, "trigger")
+	} else {
+		services.RecordSuccess(service)
+	}
+
+	if err := service.Update(); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+
+	sendJsonAction(service, "update", w, r)
+}
+
 func apiServiceUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	service, err := findService(r)
 	if err != nil {
@@ -84,13 +125,11 @@ func apiServiceUpdateHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
-
-	err = service.Update()
-	if err != nil {
+	if err := service.Update(); err != nil {
 		sendErrorJson(err, w, r)
 		return
 	}
-	//go service.CheckService(true)
+	go service.CheckService(true)
 	sendJsonAction(service, "update", w, r)
 }
 
@@ -196,7 +235,21 @@ func apiServiceTimeDataHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
+
 	returnJson(uptimeData, w, r)
+}
+
+func apiServiceHitsDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	service, err := findService(r)
+	if err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	if err := service.AllHits().DeleteAll(); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	sendJsonAction(service, "delete", w, r)
 }
 
 func apiServiceDeleteHandler(w http.ResponseWriter, r *http.Request) {
@@ -242,8 +295,7 @@ func servicesDeleteFailuresHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
-	err = service.DeleteFailures()
-	if err != nil {
+	if err := service.AllFailures().DeleteAll(); err != nil {
 		sendErrorJson(err, w, r)
 		return
 	}

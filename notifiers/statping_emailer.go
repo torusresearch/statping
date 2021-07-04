@@ -3,13 +3,14 @@ package notifiers
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/types/notifications"
-	"github.com/torusresearch/statping/types/notifier"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
 	"time"
+
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/types/notifications"
+	"github.com/statping/statping/types/notifier"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
 )
 
 var _ notifier.Notifier = (*statpingEmailer)(nil)
@@ -27,6 +28,10 @@ func (s *statpingEmailer) Select() *notifications.Notification {
 	return s.Notification
 }
 
+func (s *statpingEmailer) Valid(values notifications.Values) error {
+	return nil
+}
+
 var statpingMailer = &statpingEmailer{&notifications.Notification{
 	Method:      statpingEmailerName,
 	Title:       "Email",
@@ -39,7 +44,7 @@ var statpingMailer = &statpingEmailer{&notifications.Notification{
 	Form: []notifications.NotificationForm{{
 		Type:        "email",
 		Title:       "Send to Email Address",
-		Placeholder: "Insert your email address",
+		Placeholder: "info@statping.com",
 		DbField:     "Host",
 		Required:    true,
 	}}},
@@ -69,7 +74,7 @@ type statpingMail struct {
 // OnFailure will trigger failing service
 func (s *statpingEmailer) OnFailure(srv services.Service, f failures.Failure) (string, error) {
 	ee := statpingMail{
-		Email:   s.Host,
+		Email:   s.Host.String,
 		Core:    *core.App,
 		Service: srv,
 		Failure: f,
@@ -80,7 +85,7 @@ func (s *statpingEmailer) OnFailure(srv services.Service, f failures.Failure) (s
 // OnSuccess will trigger successful service
 func (s *statpingEmailer) OnSuccess(srv services.Service) (string, error) {
 	ee := statpingMail{
-		Email:   s.Host,
+		Email:   s.Host.String,
 		Core:    *core.App,
 		Service: srv,
 		Failure: failures.Failure{},
@@ -91,7 +96,7 @@ func (s *statpingEmailer) OnSuccess(srv services.Service) (string, error) {
 // OnSave will trigger when this notifier is saved
 func (s *statpingEmailer) OnSave() (string, error) {
 	ee := statpingMail{
-		Email:   s.Host,
+		Email:   s.Host.String,
 		Core:    *core.App,
 		Service: services.Service{},
 		Failure: failures.Failure{},

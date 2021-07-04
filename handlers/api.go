@@ -2,19 +2,21 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/torusresearch/statping/types/checkins"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/errors"
-	"github.com/torusresearch/statping/types/groups"
-	"github.com/torusresearch/statping/types/incidents"
-	"github.com/torusresearch/statping/types/messages"
-	"github.com/torusresearch/statping/types/notifications"
-	"github.com/torusresearch/statping/types/null"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/types/users"
-	"github.com/torusresearch/statping/utils"
 	"net/http"
 	"time"
+
+	"github.com/statping/statping/types/checkins"
+	"github.com/statping/statping/types/configs"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/errors"
+	"github.com/statping/statping/types/groups"
+	"github.com/statping/statping/types/incidents"
+	"github.com/statping/statping/types/messages"
+	"github.com/statping/statping/types/notifications"
+	"github.com/statping/statping/types/null"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/types/users"
+	"github.com/statping/statping/utils"
 )
 
 type apiResponse struct {
@@ -31,10 +33,12 @@ func apiIndexHandler(r *http.Request) interface{} {
 }
 
 func apiRenewHandler(w http.ResponseWriter, r *http.Request) {
-	var err error
-	core.App.ApiSecret = utils.NewSHA256Hash()
-	err = core.App.Update()
-	if err != nil {
+	newApi := utils.Params.GetString("API_SECRET")
+	if newApi == "" {
+		newApi = utils.NewSHA256Hash()
+	}
+	core.App.ApiSecret = newApi
+	if err := core.App.Update(); err != nil {
 		sendErrorJson(err, w, r)
 		return
 	}
@@ -88,10 +92,22 @@ func apiCoreHandler(w http.ResponseWriter, r *http.Request) {
 	if c.Domain != app.Domain {
 		app.Domain = c.Domain
 	}
+	if c.Language != app.Language {
+		app.Language = c.Language
+	}
+	utils.Params.Set("LANGUAGE", app.Language)
 	app.UseCdn = null.NewNullBool(c.UseCdn.Bool)
 	app.AllowReports = null.NewNullBool(c.AllowReports.Bool)
-	utils.SentryInit(nil, app.AllowReports.Bool)
-	err = app.Update()
+
+	if err := app.Update(); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	if err := configs.Save(); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+
 	returnJson(core.App, w, r)
 }
 
@@ -99,27 +115,6 @@ type cacheJson struct {
 	URL        string    `json:"url"`
 	Expiration time.Time `json:"expiration"`
 	Size       int       `json:"size"`
-}
-
-func apiCacheHandler(w http.ResponseWriter, r *http.Request) {
-	var cacheList []cacheJson
-	for k, v := range CacheStorage.List() {
-		cacheList = append(cacheList, cacheJson{
-			URL:        k,
-			Expiration: time.Unix(0, v.Expiration).UTC(),
-			Size:       len(v.Content),
-		})
-	}
-	returnJson(cacheList, w, r)
-}
-
-func apiClearCacheHandler(w http.ResponseWriter, r *http.Request) {
-	CacheStorage.StopRoutine()
-	CacheStorage = NewStorage()
-	output := apiResponse{
-		Status: "success",
-	}
-	returnJson(output, w, r)
 }
 
 func sendErrorJson(err error, w http.ResponseWriter, r *http.Request) {

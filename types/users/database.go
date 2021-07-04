@@ -1,9 +1,9 @@
 package users
 
 import (
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/metrics"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/metrics"
+	"github.com/statping/statping/utils"
 )
 
 var (
@@ -40,6 +40,12 @@ func Find(id int64) (*User, error) {
 func FindByUsername(username string) (*User, error) {
 	var user User
 	q := db.Where("username = ?", username).Find(&user)
+	return &user, q.Error()
+}
+
+func FindByAPIKey(key string) (*User, error) {
+	var user User
+	q := db.Where("api_key = ?", key).Find(&user)
 	return &user, q.Error()
 }
 

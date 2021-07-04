@@ -1,19 +1,18 @@
 package handlers
 
 import (
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/errors"
-	"golang.org/x/oauth2"
 	"net/http"
 	"strings"
+
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/errors"
+	"golang.org/x/oauth2"
 )
 
 func customOAuth(r *http.Request) (*oAuth, error) {
 	auth := core.App.OAuth
 	code := r.URL.Query().Get("code")
-
 	scopes := strings.Split(auth.CustomScopes, ",")
-
 	config := &oauth2.Config{
 		ClientID:     auth.CustomClientID,
 		ClientSecret: auth.CustomClientSecret,

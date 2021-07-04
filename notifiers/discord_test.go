@@ -3,13 +3,13 @@ package notifiers
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/types/notifications"
-	"github.com/torusresearch/statping/types/null"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/types/notifications"
+	"github.com/statping/statping/types/null"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
 	"testing"
 	"time"
 )
@@ -19,6 +19,7 @@ var (
 )
 
 func TestDiscordNotifier(t *testing.T) {
+	t.Parallel()
 	err := utils.InitLogs()
 	require.Nil(t, err)
 	DISCORD_URL = utils.Params.GetString("DISCORD_URL")
@@ -35,14 +36,14 @@ func TestDiscordNotifier(t *testing.T) {
 	}
 
 	t.Run("Load discord", func(t *testing.T) {
-		Discorder.Host = DISCORD_URL
+		Discorder.Host = null.NewNullString(DISCORD_URL)
 		Discorder.Delay = time.Duration(100 * time.Millisecond)
 		Discorder.Enabled = null.NewNullBool(true)
 
 		Add(Discorder)
 
 		assert.Equal(t, "Hunter Long", Discorder.Author)
-		assert.Equal(t, DISCORD_URL, Discorder.Host)
+		assert.Equal(t, DISCORD_URL, Discorder.Host.String)
 	})
 
 	t.Run("discord Notifier Tester", func(t *testing.T) {

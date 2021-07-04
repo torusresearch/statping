@@ -3,7 +3,7 @@ package handlers
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/utils"
 	"net/url"
 	"testing"
 )

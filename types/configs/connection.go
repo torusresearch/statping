@@ -2,23 +2,38 @@ package configs
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/checkins"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/types/groups"
-	"github.com/torusresearch/statping/types/hits"
-	"github.com/torusresearch/statping/types/incidents"
-	"github.com/torusresearch/statping/types/messages"
-	"github.com/torusresearch/statping/types/notifications"
-	"github.com/torusresearch/statping/types/null"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/types/users"
-	"github.com/torusresearch/statping/utils"
-	"time"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/checkins"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/types/groups"
+	"github.com/statping/statping/types/hits"
+	"github.com/statping/statping/types/incidents"
+	"github.com/statping/statping/types/messages"
+	"github.com/statping/statping/types/notifications"
+	"github.com/statping/statping/types/null"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/types/users"
+	"github.com/statping/statping/utils"
 )
+
+// initModels sets the database for each Statping type packages
+func initModels(db database.Database) {
+	core.SetDB(db)
+	services.SetDB(db)
+	hits.SetDB(db)
+	failures.SetDB(db)
+	checkins.SetDB(db)
+	notifications.SetDB(db)
+	incidents.SetDB(db)
+	users.SetDB(db)
+	messages.SetDB(db)
+	groups.SetDB(db)
+}
 
 // Connect will attempt to connect to the sqlite, postgres, or mysql database
 func Connect(configs *DbConfig, retry bool) error {
@@ -54,6 +69,10 @@ func Connect(configs *DbConfig, retry bool) error {
 		log.Infoln(fmt.Sprintf("Database %s connection was successful.", configs.DbConn))
 	}
 
+	if utils.Params.GetBool("READ_ONLY") {
+		log.Warnln("Running in READ ONLY MODE")
+	}
+
 	configs.Db = dbSession
 
 	initModels(configs.Db)
@@ -61,20 +80,9 @@ func Connect(configs *DbConfig, retry bool) error {
 	return err
 }
 
-func initModels(db database.Database) {
-	core.SetDB(db)
-	services.SetDB(db)
-	hits.SetDB(db)
-	failures.SetDB(db)
-	checkins.SetDB(db)
-	notifications.SetDB(db)
-	incidents.SetDB(db)
-	users.SetDB(db)
-	messages.SetDB(db)
-	groups.SetDB(db)
-}
-
-func CreateAdminUser(c *DbConfig) error {
+// CreateAdminUser will create the default admin user "admin", "admin", or use the
+// environment variables ADMIN_USER, ADMIN_PASSWORD, and ADMIN_EMAIL if set.
+func CreateAdminUser() error {
 	adminUser := utils.Params.GetString("ADMIN_USER")
 	adminPass := utils.Params.GetString("ADMIN_PASSWORD")
 	adminEmail := utils.Params.GetString("ADMIN_EMAIL")
@@ -88,6 +96,7 @@ func CreateAdminUser(c *DbConfig) error {
 		Username: adminUser,
 		Password: adminPass,
 		Email:    adminEmail,
+		Scopes:   "admin",
 		Admin:    null.NewNullBool(true),
 	}
 

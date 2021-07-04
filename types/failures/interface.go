@@ -2,8 +2,9 @@ package failures
 
 import (
 	"fmt"
-	"github.com/torusresearch/statping/database"
 	"time"
+
+	"github.com/statping/statping/database"
 )
 
 type ColumnIDInterfacer interface {
@@ -38,7 +39,7 @@ func (f Failurer) List() []*Failure {
 
 func (f Failurer) LastAmount(amount int) []*Failure {
 	var fail []*Failure
-	f.db.Order("id asc").Limit(amount).Find(&fail)
+	f.db.Order("id DESC").Limit(amount).Find(&fail)
 	return fail
 }
 
