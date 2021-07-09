@@ -1,4 +1,4 @@
-FROM illusiveman/statping:base AS base
+FROM torus/statping-base AS base
 ARG BUILDPLATFORM
 
 # Statping main Docker image that contains all required libraries

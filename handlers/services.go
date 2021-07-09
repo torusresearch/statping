@@ -129,7 +129,7 @@ func apiServiceUpdateHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
-	go service.CheckService(true)
+	//go service.CheckService(true)
 	sendJsonAction(service, "update", w, r)
 }
 

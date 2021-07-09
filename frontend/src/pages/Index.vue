@@ -42,6 +42,7 @@
 </template>
 
 <script>
+
 const Group = () => import('@/components/Index/Group');
 const Header = () => import('@/components/Index/Header');
 const MessageBlock = () => import('@/components/Index/MessageBlock');
@@ -100,7 +101,19 @@ export default {
         //     return this.$store.getters.servicesNoGroup;
         // },
     },
-    async mounted () {},
+    async mounted () {
+        window.$crisp = [];
+        window.CRISP_WEBSITE_ID = 'b1ae36a2-c9d5-4554-9db8-b28aeb8ddf4e';
+
+        (function () {
+            const d = document;
+            const s = d.createElement('script');
+
+            s.src = 'https://client.crisp.chat/l.js';
+            s.async = 1;
+            d.getElementsByTagName('head')[0].appendChild(s);
+        })();
+    },
     methods: {
         async checkLogin () {
             const token = this.$cookies.get('statping_auth');

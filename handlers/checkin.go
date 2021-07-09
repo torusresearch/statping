@@ -52,6 +52,8 @@ func checkinCreateHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
+
+	checkin.Start()
 	sendJsonAction(checkin, "create", w, r)
 }
 
@@ -81,6 +83,12 @@ func checkinHitHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	checkin.Failing = false
 	checkin.LastHitTime = utils.Now()
+
+	// Bring the service online
+	err = checkin.RecordSuccess()
+	if err != nil {
+		log.WithField("error", err).Error("couldn't record success")
+	}
 
 	sendJsonAction(hit.Id, "update", w, r)
 }

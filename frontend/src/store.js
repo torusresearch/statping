@@ -155,7 +155,7 @@ export default new Vuex.Store({
     },
     actions: {
         async getAllServices (context) {
-            const services = await Api.services();
+            const services = await Api.servicesMetadata();
             context.commit('setServices', services);
         },
         async loadCore (context) {
@@ -169,7 +169,7 @@ export default new Vuex.Store({
         async loadRequired (context) {
             const groups = await Api.groups();
             context.commit('setGroups', groups);
-            const services = await Api.services();
+            const services = await Api.servicesMetadata();
             context.commit('setServices', services);
             const messages = await Api.messages();
             context.commit('setMessages', messages);
@@ -180,7 +180,7 @@ export default new Vuex.Store({
         async loadAdmin (context) {
             const groups = await Api.groups();
             context.commit('setGroups', groups);
-            const services = await Api.services();
+            const services = await Api.servicesMetadata();
             context.commit('setServices', services);
             const messages = await Api.messages();
             context.commit('setMessages', messages);

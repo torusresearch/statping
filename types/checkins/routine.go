@@ -41,6 +41,12 @@ CheckinLoop:
 				if err := c.CreateFailure(fail); err != nil {
 					log.Errorln(err)
 				}
+
+				// Bring the service offline
+				err := c.RecordFailure()
+				if err != nil {
+					log.WithField("error", err).Error("couldn't record the failure")
+				}
 			}
 			reCheck = c.Period()
 		}

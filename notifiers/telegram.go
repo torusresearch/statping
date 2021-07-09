@@ -62,17 +62,21 @@ var Telegram = &telegram{&notifications.Notification{
 // Send will send a HTTP Post to the Telegram API. It accepts type: string
 func (t *telegram) sendMessage(message string) (string, error) {
 
-	apiEndpoint := fmt.Sprintf("https://api.telegram.org/bot%v/sendMessage", t.ApiSecret)
+	apiEndpoint := fmt.Sprintf("https://api.telegram.org/bot%v/sendMessage", t.ApiSecret.String)
 
 	v := url.Values{}
 	v.Set("chat_id", t.Var1.String)
 	v.Set("text", message)
+
+	log.Infoln(v.Encode())
+	log.Info(apiEndpoint)
 
 	contents, _, err := utils.HttpRequest(apiEndpoint, "POST", "application/x-www-form-urlencoded", nil, strings.NewReader(v.Encode()), time.Duration(10*time.Second), true, nil)
 
 	success, _ := telegramSuccess(contents)
 	if !success {
 		errorOut := telegramError(contents)
+		log.Error(errorOut)
 		out := fmt.Sprintf("Error code %v - %v", errorOut.ErrorCode, errorOut.Description)
 		return string(contents), errors.New(out)
 	}
