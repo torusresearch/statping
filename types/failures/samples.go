@@ -2,10 +2,11 @@ package failures
 
 import (
 	"fmt"
-	gormbulk "github.com/t-tiger/gorm-bulk-insert/v2"
-	"github.com/torusresearch/statping/types"
-	"github.com/torusresearch/statping/utils"
 	"time"
+
+	"github.com/statping/statping/types"
+	"github.com/statping/statping/utils"
+	gormbulk "github.com/t-tiger/gorm-bulk-insert/v2"
 )
 
 var (
@@ -22,6 +23,7 @@ func Example() Failure {
 		Service:   1,
 		Checkin:   0,
 		PingTime:  48309,
+		Reason:    "status_code",
 		CreatedAt: utils.Now(),
 	}
 }
@@ -34,6 +36,7 @@ func Samples() error {
 		f1 := &Failure{
 			Service:   i,
 			Issue:     "Server failure",
+			Reason:    "lookup",
 			CreatedAt: utils.Now().Add(-time.Duration(3*i) * 86400),
 		}
 		if err := f1.Create(); err != nil {
@@ -42,7 +45,8 @@ func Samples() error {
 
 		f2 := &Failure{
 			Service:   i,
-			Issue:     "Server failure",
+			Issue:     "Regex failed to match the response",
+			Reason:    "regex",
 			CreatedAt: utils.Now().Add(-time.Duration(5*i) * 12400),
 		}
 		if err := f2.Create(); err != nil {

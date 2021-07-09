@@ -2,13 +2,16 @@ package notifiers
 
 import (
 	"bytes"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
 	"html/template"
 	"time"
+
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
 )
+
+//go:generate go run generate.go
 
 var log = utils.Log.WithField("type", "notifier")
 
@@ -16,6 +19,7 @@ type replacer struct {
 	Core    core.Core
 	Service services.Service
 	Failure failures.Failure
+	Email   string
 	Custom  map[string]string
 }
 
@@ -32,7 +36,11 @@ func InitNotifiers() {
 		Mobile,
 		Pushover,
 		statpingMailer,
+		Gotify,
+		AmazonSNS,
 	)
+
+	services.UpdateNotifiers()
 }
 
 func ReplaceTemplate(tmpl string, data replacer) string {
@@ -52,10 +60,11 @@ func ReplaceTemplate(tmpl string, data replacer) string {
 
 func Add(notifs ...services.ServiceNotifier) {
 	for _, n := range notifs {
-		services.AddNotifier(n)
-		if err := n.Select().Create(); err != nil {
+		notif := n.Select()
+		if err := notif.Create(); err != nil {
 			log.Error(err)
 		}
+		services.AddNotifier(n)
 	}
 }
 

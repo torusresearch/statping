@@ -1,9 +1,9 @@
 package messages
 
 import (
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/errors"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/errors"
+	"github.com/statping/statping/utils"
 )
 
 var (

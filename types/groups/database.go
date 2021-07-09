@@ -1,11 +1,12 @@
 package groups
 
 import (
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/errors"
-	"github.com/torusresearch/statping/types/metrics"
-	"github.com/torusresearch/statping/utils"
 	"sort"
+
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/errors"
+	"github.com/statping/statping/types/metrics"
+	"github.com/statping/statping/utils"
 )
 
 var (
@@ -15,6 +16,13 @@ var (
 
 func SetDB(database database.Database) {
 	db = database.Model(&Group{})
+}
+
+func (g *Group) Validate() error {
+	if g.Name == "" {
+		return errors.New("group name is empty")
+	}
+	return nil
 }
 
 func (g *Group) AfterFind() {
@@ -27,6 +35,14 @@ func (g *Group) AfterUpdate() {
 
 func (g *Group) AfterDelete() {
 	metrics.Query("group", "delete")
+}
+
+func (g *Group) BeforeUpdate() error {
+	return g.Validate()
+}
+
+func (g *Group) BeforeCreate() error {
+	return g.Validate()
 }
 
 func (g *Group) AfterCreate() {

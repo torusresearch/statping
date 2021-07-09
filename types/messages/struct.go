@@ -1,8 +1,9 @@
 package messages
 
 import (
-	"github.com/torusresearch/statping/types/null"
 	"time"
+
+	"github.com/statping/statping/types/null"
 )
 
 // Message is for creating Announcements, Alerts and other messages for the end users

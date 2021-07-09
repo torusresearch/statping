@@ -3,9 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/errors"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/errors"
+	"github.com/statping/statping/utils"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/slack"
 	"net/http"

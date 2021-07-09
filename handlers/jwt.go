@@ -3,7 +3,7 @@ package handlers
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
-	"github.com/torusresearch/statping/types/users"
+	"github.com/statping/statping/types/users"
 	"net/http"
 	"time"
 )
@@ -11,6 +11,7 @@ import (
 type JwtClaim struct {
 	Username string `json:"username"`
 	Admin    bool   `json:"admin"`
+	Scopes   string `json:"scopes"`
 	jwt.StandardClaims
 }
 
@@ -29,6 +30,7 @@ func setJwtToken(user *users.User, w http.ResponseWriter) (JwtClaim, string) {
 	jwtClaim := JwtClaim{
 		Username: user.Username,
 		Admin:    user.Admin.Bool,
+		Scopes:   user.Scopes,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		}}
@@ -49,17 +51,9 @@ func setJwtToken(user *users.User, w http.ResponseWriter) (JwtClaim, string) {
 	return jwtClaim, tokenString
 }
 
-func getJwtToken(r *http.Request) (JwtClaim, error) {
-	c, err := r.Cookie(cookieName)
-	if err != nil {
-		if err == http.ErrNoCookie {
-			return JwtClaim{}, err
-		}
-		return JwtClaim{}, err
-	}
-
+func parseToken(token string) (JwtClaim, error) {
 	var claims JwtClaim
-	tkn, err := jwt.ParseWithClaims(c.Value, &claims, func(token *jwt.Token) (interface{}, error) {
+	tkn, err := jwt.ParseWithClaims(token, &claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
 
@@ -72,5 +66,16 @@ func getJwtToken(r *http.Request) (JwtClaim, error) {
 	if !tkn.Valid {
 		return claims, errors.New("token is not valid")
 	}
-	return claims, err
+	return claims, nil
+}
+
+func getJwtToken(r *http.Request) (JwtClaim, error) {
+	c, err := r.Cookie(cookieName)
+	if err != nil {
+		if err == http.ErrNoCookie {
+			return JwtClaim{}, err
+		}
+		return JwtClaim{}, err
+	}
+	return parseToken(c.Value)
 }

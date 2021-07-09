@@ -2,14 +2,15 @@ package notifiers
 
 import (
 	"fmt"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/types/notifications"
-	"github.com/torusresearch/statping/types/notifier"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/types/notifications"
+	"github.com/statping/statping/types/notifier"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
 )
 
 var _ notifier.Notifier = (*lineNotifier)(nil)
@@ -24,6 +25,10 @@ type lineNotifier struct {
 
 func (l *lineNotifier) Select() *notifications.Notification {
 	return l.Notification
+}
+
+func (l *lineNotifier) Valid(values notifications.Values) error {
+	return nil
 }
 
 var LineNotify = &lineNotifier{&notifications.Notification{
@@ -46,7 +51,7 @@ var LineNotify = &lineNotifier{&notifications.Notification{
 func (l *lineNotifier) sendMessage(message string) (string, error) {
 	v := url.Values{}
 	v.Set("message", message)
-	headers := []string{fmt.Sprintf("Authorization=Bearer %v", l.ApiSecret)}
+	headers := []string{fmt.Sprintf("Authorization=Bearer %v", l.ApiSecret.String)}
 	content, _, err := utils.HttpRequest("https://notify-api.line.me/api/notify", "POST", "application/x-www-form-urlencoded", headers, strings.NewReader(v.Encode()), time.Duration(10*time.Second), true, nil)
 	return string(content), err
 }

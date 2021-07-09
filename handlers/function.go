@@ -1,12 +1,13 @@
 package handlers
 
 import (
-	"github.com/torusresearch/statping/source"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/utils"
 	"html/template"
 	"net/http"
 	"net/url"
+
+	"github.com/statping/statping/source"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/utils"
 )
 
 var (
@@ -37,6 +38,9 @@ var handlerFuncs = func(w http.ResponseWriter, r *http.Request) template.FuncMap
 			return source.UsingAssets(utils.Directory)
 		},
 		"BasePath": func() string {
+			return basePath
+		},
+		"Icon": func() string {
 			return basePath
 		},
 	}

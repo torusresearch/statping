@@ -2,7 +2,7 @@ package services
 
 import (
 	"github.com/pkg/errors"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/utils"
 	"gopkg.in/yaml.v2"
 )
 

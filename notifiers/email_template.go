@@ -566,7 +566,7 @@ Offline for {{.Service.Downtime.Human}}
                                             <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="" width="100%">
                                               <tr>
                                                 <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
-                                                  <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;font-weight:bold;line-height:16px;text-align:center;color:#445566;"><a class="footer-link" href="https://statping.com">Statping.com</a>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; <a class="footer-link" href="https://github.com/torusresearch/statping">Github</a>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;
+                                                  <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;font-weight:bold;line-height:16px;text-align:center;color:#445566;"><a class="footer-link" href="https://statping.com">Statping.com</a>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; <a class="footer-link" href="https://github.com/statping/statping">Github</a>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;
                                                     <a class="footer-link" href="https://statping.com/privacy">Privacy</a>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0; <a class="footer-link" href="https://www.google.com">Unsubscribe</a></div>
                                                 </td>
                                               </tr>

@@ -2,16 +2,16 @@ package handlers
 
 import (
 	"errors"
-	"github.com/torusresearch/statping/notifiers"
-	"github.com/torusresearch/statping/types/configs"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/null"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
 	"net/http"
 	"net/url"
 	"strconv"
-	"time"
+
+	"github.com/statping/statping/notifiers"
+	"github.com/statping/statping/types/configs"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/null"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
 )
 
 func processSetupHandler(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +60,7 @@ func processSetupHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if err := configs.CreateAdminUser(confgs); err != nil {
+		if err := configs.CreateAdminUser(); err != nil {
 			sendErrorJson(err, w, r)
 			return
 		}
@@ -121,9 +121,8 @@ func processSetupHandler(w http.ResponseWriter, r *http.Request) {
 
 	core.App.Setup = true
 
-	CacheStorage.Delete("/")
 	resetCookies()
-	time.Sleep(2 * time.Second)
+
 	out := struct {
 		Message string            `json:"message"`
 		Config  *configs.DbConfig `json:"config"`

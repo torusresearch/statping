@@ -2,17 +2,18 @@ package utils
 
 import (
 	"fmt"
-	"github.com/fatih/structs"
-	"github.com/getsentry/sentry-go"
-	Logger "github.com/sirupsen/logrus"
-	"github.com/torusresearch/statping/types/null"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"io"
 	"os"
 	"reflect"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/fatih/structs"
+	"github.com/getsentry/sentry-go"
+	Logger "github.com/sirupsen/logrus"
+	"github.com/statping/statping/types/null"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var (
@@ -21,35 +22,29 @@ var (
 	LastLines    []*logRow
 	LockLines    sync.Mutex
 	VerboseMode  int
-	Version      string
 	allowReports bool
 )
 
 const (
 	logFilePath   = "/logs/statping.log"
-	errorReporter = "https://ddf2784201134d51a20c3440e222cebe@sentry.statping.com/4"
+	errorReporter = "https://518d5b04a52b4130bbbbd5b9e70cb7ba@sentry.statping.com/2"
 )
 
-func SentryInit(v *string, allow bool) {
+func SentryInit(allow bool) {
 	allowReports = allow
-	if v != nil {
-		if *v == "" {
-			*v = "development"
-		}
-		Version = *v
-	}
 	goEnv := Params.GetString("GO_ENV")
 	allowReports := Params.GetBool("ALLOW_REPORTS")
-	if allowReports || allow || goEnv == "test" {
+	if allow || goEnv == "test" || allowReports {
 		if err := sentry.Init(sentry.ClientOptions{
 			Dsn:              errorReporter,
 			Environment:      goEnv,
-			Release:          Version,
+			Release:          Params.GetString("VERSION"),
 			AttachStacktrace: true,
 		}); err != nil {
 			Log.Errorln(err)
 		}
 		Log.Infoln("Error Reporting initiated, thank you!")
+		sentry.CaptureMessage("sentry connected")
 	}
 }
 
@@ -60,10 +55,17 @@ func SentryErr(err error) {
 	sentry.CaptureException(err)
 }
 
+func sentryTags() map[string]string {
+	val := make(map[string]string)
+	val["database"] = Params.GetString("DB_CONN")
+	return val
+}
+
 func SentryLogEntry(entry *Logger.Entry) {
 	e := sentry.NewEvent()
 	e.Message = entry.Message
-	e.Release = Version
+	e.Tags = sentryTags()
+	e.Release = Params.GetString("VERSION")
 	e.Contexts = entry.Data
 	sentry.CaptureEvent(e)
 }

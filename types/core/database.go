@@ -2,16 +2,28 @@ package core
 
 import (
 	"github.com/pkg/errors"
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/metrics"
-	"github.com/torusresearch/statping/types/null"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/metrics"
+	"github.com/statping/statping/types/null"
+	"github.com/statping/statping/utils"
 )
 
 var db database.Database
 
 func SetDB(database database.Database) {
 	db = database.Model(&Core{})
+	c, err := Select()
+	if err != nil {
+		utils.Log.Errorln(err)
+		return
+	}
+	apiEnv := utils.Params.GetString("API_SECRET")
+	if c.ApiSecret != apiEnv && apiEnv != "" {
+		c.ApiSecret = apiEnv
+		if err := c.Update(); err != nil {
+			utils.Log.Errorln(err)
+		}
+	}
 }
 
 func (c *Core) AfterFind() {
@@ -20,7 +32,6 @@ func (c *Core) AfterFind() {
 
 func Select() (*Core, error) {
 	var c Core
-	// SelectCore will return the CoreApp global variable and the settings/configs for Statping
 	if err := db.DB().Ping(); err != nil {
 		return nil, errors.New("database has not been initiated yet.")
 	}
@@ -43,26 +54,24 @@ func Select() (*Core, error) {
 	if utils.Params.GetString("LANGUAGE") != "" {
 		App.Language = utils.Params.GetString("LANGUAGE")
 	}
+	if utils.Params.GetString("API_SECRET") != "" {
+		App.ApiSecret = utils.Params.GetString("API_SECRET")
+	}
+	App.Version = utils.Params.GetString("VERSION")
+	App.Commit = utils.Params.GetString("COMMIT")
 	return App, q.Error()
 }
 
 func (c *Core) Create() error {
-	secret := utils.Params.GetString("API_SECRET")
-	if secret == "" {
-		secret = utils.RandomString(32)
+	if c.ApiSecret == "" {
+		c.ApiSecret = utils.RandomString(16)
+		apiEnv := utils.Params.GetString("API_SECRET")
+		if apiEnv != "" {
+			c.ApiSecret = apiEnv
+		}
 	}
-	newCore := &Core{
-		Name:        c.Name,
-		Description: c.Description,
-		ConfigFile:  utils.Directory + "/config.yml",
-		ApiSecret:   secret,
-		Version:     App.Version,
-		Domain:      c.Domain,
-		Language:    c.Language,
-		MigrationId: utils.Now().Unix(),
-	}
-	q := db.Create(&newCore)
-	utils.Log.Infof("API Key created: %s", secret)
+	q := db.Create(c)
+	utils.Log.Infof("API Key created: %s", c.ApiSecret)
 	return q.Error()
 }
 

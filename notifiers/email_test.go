@@ -3,13 +3,13 @@ package notifiers
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/types/notifications"
-	"github.com/torusresearch/statping/types/null"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/types/notifications"
+	"github.com/statping/statping/types/null"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
 	"testing"
 	"time"
 )
@@ -24,6 +24,7 @@ var (
 )
 
 func TestEmailNotifier(t *testing.T) {
+	t.Parallel()
 	err := utils.InitLogs()
 	require.Nil(t, err)
 
@@ -46,18 +47,18 @@ func TestEmailNotifier(t *testing.T) {
 	}
 
 	t.Run("New email", func(t *testing.T) {
-		email.Host = EMAIL_HOST
-		email.Username = EMAIL_USER
-		email.Password = EMAIL_PASS
-		email.Var1 = EMAIL_OUTGOING
-		email.Var2 = EMAIL_SEND_TO
-		email.Port = int(EMAIL_PORT)
+		email.Host = null.NewNullString(EMAIL_HOST)
+		email.Username = null.NewNullString(EMAIL_USER)
+		email.Password = null.NewNullString(EMAIL_PASS)
+		email.Var1 = null.NewNullString(EMAIL_OUTGOING)
+		email.Var2 = null.NewNullString(EMAIL_SEND_TO)
+		email.Port = null.NewNullInt64(EMAIL_PORT)
 		email.Delay = time.Duration(100 * time.Millisecond)
 		email.Enabled = null.NewNullBool(true)
 
 		Add(email)
 		assert.Equal(t, "Hunter Long", email.Author)
-		assert.Equal(t, EMAIL_HOST, email.Host)
+		assert.Equal(t, EMAIL_HOST, email.Host.String)
 	})
 
 	t.Run("email Within Limits", func(t *testing.T) {

@@ -1,8 +1,9 @@
 package users
 
 import (
-	"github.com/torusresearch/statping/types/null"
 	"time"
+
+	"github.com/statping/statping/types/null"
 )
 
 // User is the main struct for Users
@@ -12,7 +13,7 @@ type User struct {
 	Password  string        `gorm:"column:password" json:"password,omitempty"`
 	Email     string        `gorm:"type:varchar(100);column:email" json:"email,omitempty"`
 	ApiKey    string        `gorm:"column:api_key" json:"api_key,omitempty"`
-	ApiSecret string        `gorm:"column:api_secret" json:"api_secret,omitempty"`
+	Scopes    string        `gorm:"column:scopes" json:"scopes,omitempty"`
 	Admin     null.NullBool `gorm:"column:administrator" json:"admin,omitempty"`
 	CreatedAt time.Time     `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt time.Time     `gorm:"column:updated_at" json:"updated_at"`

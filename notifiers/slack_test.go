@@ -3,13 +3,13 @@ package notifiers
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/types/notifications"
-	"github.com/torusresearch/statping/types/null"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/types/notifications"
+	"github.com/statping/statping/types/null"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
 	"testing"
 	"time"
 )
@@ -21,6 +21,8 @@ var (
 func TestSlackNotifier(t *testing.T) {
 	err := utils.InitLogs()
 	require.Nil(t, err)
+
+	t.Parallel()
 	db, err := database.OpenTester()
 	require.Nil(t, err)
 	db.AutoMigrate(&notifications.Notification{})
@@ -28,21 +30,21 @@ func TestSlackNotifier(t *testing.T) {
 	core.Example()
 
 	SLACK_URL = utils.Params.GetString("SLACK_URL")
-	slacker.Host = SLACK_URL
-	slacker.Enabled = null.NewNullBool(true)
-
 	if SLACK_URL == "" {
 		t.Log("slack notifier testing skipped, missing SLACK_URL environment variable")
 		t.SkipNow()
 	}
 
+	slacker.Host = null.NewNullString(SLACK_URL)
+	slacker.Enabled = null.NewNullBool(true)
+
 	t.Run("Load slack", func(t *testing.T) {
-		slacker.Host = SLACK_URL
-		slacker.Delay = time.Duration(100 * time.Millisecond)
+		slacker.Host = null.NewNullString(SLACK_URL)
+		slacker.Delay = 100 * time.Millisecond
 		slacker.Limits = 3
 		Add(slacker)
 		assert.Equal(t, "Hunter Long", slacker.Author)
-		assert.Equal(t, SLACK_URL, slacker.Host)
+		assert.Equal(t, SLACK_URL, slacker.Host.String)
 	})
 
 	t.Run("slack Within Limits", func(t *testing.T) {

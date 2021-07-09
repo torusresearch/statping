@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/torusresearch/statping/types/checkins"
-	"github.com/torusresearch/statping/types/errors"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/types/checkins"
+	"github.com/statping/statping/types/errors"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/utils"
 	"net"
 	"net/http"
 )
@@ -24,8 +24,7 @@ func findCheckin(r *http.Request) (*checkins.Checkin, string, error) {
 }
 
 func apiAllCheckinsHandler(w http.ResponseWriter, r *http.Request) {
-	chks := checkins.All()
-	returnJson(chks, w, r)
+	returnJson(checkins.All(), w, r)
 }
 
 func apiCheckinHandler(w http.ResponseWriter, r *http.Request) {
@@ -39,8 +38,7 @@ func apiCheckinHandler(w http.ResponseWriter, r *http.Request) {
 
 func checkinCreateHandler(w http.ResponseWriter, r *http.Request) {
 	var checkin *checkins.Checkin
-	err := DecodeJSON(r, &checkin)
-	if err != nil {
+	if err := DecodeJSON(r, &checkin); err != nil {
 		sendErrorJson(err, w, r)
 		return
 	}
@@ -54,6 +52,8 @@ func checkinCreateHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
+
+	checkin.Start()
 	sendJsonAction(checkin, "create", w, r)
 }
 
@@ -63,22 +63,33 @@ func checkinHitHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
+	log.Infof("Checking %s was requested", checkin.Name)
+
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+
+	if last := checkin.LastHit(); last == nil {
+		checkin.Start()
+	}
 
 	hit := &checkins.CheckinHit{
 		Checkin:   checkin.Id,
 		From:      ip,
 		CreatedAt: utils.Now(),
 	}
-	log.Infof("Checking %s was requested", checkin.Name)
 
-	err = hit.Create()
-	if err != nil {
+	if err := hit.Create(); err != nil {
 		sendErrorJson(err, w, r)
 		return
 	}
 	checkin.Failing = false
 	checkin.LastHitTime = utils.Now()
+
+	// Bring the service online
+	err = checkin.RecordSuccess()
+	if err != nil {
+		log.WithField("error", err).Error("couldn't record success")
+	}
+
 	sendJsonAction(hit.Id, "update", w, r)
 }
 

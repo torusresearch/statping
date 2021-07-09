@@ -1,20 +1,20 @@
 package checkins
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/failures"
-	"github.com/torusresearch/statping/utils"
 	"testing"
 	"time"
+
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/failures"
+	"github.com/statping/statping/utils"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var testCheckin = &Checkin{
 	ServiceId:   1,
 	Name:        "Test Checkin",
-	Interval:    60,
-	GracePeriod: 10,
+	Interval:    3,
 	ApiKey:      "tHiSiSaTeStXXX",
 	CreatedAt:   utils.Now(),
 	UpdatedAt:   utils.Now(),
@@ -34,15 +34,18 @@ var testCheckinHits = []*CheckinHit{{
 var testApiKey string
 
 func TestInit(t *testing.T) {
+	t.Parallel()
 	err := utils.InitLogs()
 	require.Nil(t, err)
 	db, err := database.OpenTester()
 	require.Nil(t, err)
 	SetDB(db)
+	failures.SetDB(db)
 	db.AutoMigrate(&Checkin{}, &CheckinHit{}, &failures.Failure{})
 	db.Create(&testCheckin)
 	for _, v := range testCheckinHits {
-		db.Create(&v)
+		err := db.Create(&v).Error()
+		require.Nil(t, err)
 	}
 	assert.True(t, db.HasTable(&Checkin{}))
 	assert.True(t, db.HasTable(&CheckinHit{}))
@@ -110,6 +113,11 @@ func TestInit(t *testing.T) {
 
 		all = All()
 		assert.Len(t, all, 1)
+	})
+
+	t.Run("Test Samples", func(t *testing.T) {
+		require.Nil(t, Samples())
+		assert.Len(t, All(), 3)
 	})
 
 	t.Run("Test Checkin", func(t *testing.T) {

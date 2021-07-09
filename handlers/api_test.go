@@ -4,17 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/getsentry/sentry-go"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"
-	_ "github.com/torusresearch/statping/notifiers"
-	"github.com/torusresearch/statping/source"
-	"github.com/torusresearch/statping/types"
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/groups"
-	"github.com/torusresearch/statping/types/services"
-	"github.com/torusresearch/statping/types/users"
-	"github.com/torusresearch/statping/utils"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -22,6 +11,19 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/pkg/errors"
+	_ "github.com/statping/statping/notifiers"
+	"github.com/statping/statping/source"
+	"github.com/statping/statping/types/checkins"
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/groups"
+	"github.com/statping/statping/types/messages"
+	"github.com/statping/statping/types/services"
+	"github.com/statping/statping/types/users"
+	"github.com/statping/statping/utils"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var (
@@ -32,7 +34,7 @@ func init() {
 	utils.InitLogs()
 	source.Assets(false)
 	dir = utils.Directory
-	core.New("test")
+	core.New("test", "testcommithere")
 }
 
 func TestFailedHTTPServer(t *testing.T) {
@@ -112,6 +114,9 @@ func TestSetupRoutes(t *testing.T) {
 				if !core.App.Setup {
 					return errors.New("core has not been setup")
 				}
+				if core.App.ApiSecret == "" {
+					return errors.New("API Key has not been set")
+				}
 				if len(services.AllInOrder()) == 0 {
 					return errors.New("no services where found")
 				}
@@ -163,33 +168,6 @@ func TestMainApiRoutes(t *testing.T) {
 			SecureRoute:    true,
 		},
 		{
-			Name:           "Statping View Cache",
-			URL:            "/api/cache",
-			Method:         "GET",
-			ExpectedStatus: 200,
-			BeforeTest:     SetTestENV,
-			SecureRoute:    true,
-			ResponseLen:    0,
-		},
-		{
-			Name:           "Statping Clear Cache",
-			URL:            "/api/clear_cache",
-			Method:         "POST",
-			ExpectedStatus: 200,
-			SecureRoute:    true,
-			BeforeTest: func(t *testing.T) error {
-				CacheStorage.Set("test", []byte("data here"), types.Day)
-				list := CacheStorage.List()
-				assert.Len(t, list, 1)
-				return nil
-			},
-			AfterTest: func(t *testing.T) error {
-				list := CacheStorage.List()
-				assert.Len(t, list, 0)
-				return nil
-			},
-		},
-		{
 			Name:           "Update Core",
 			URL:            "/api/core",
 			Method:         "POST",
@@ -201,12 +179,6 @@ func TestMainApiRoutes(t *testing.T) {
 				assert.Equal(t, "Updated Core", core.App.Name)
 				return nil
 			},
-		},
-		{
-			Name:           "404 Error Page",
-			URL:            "/api/missing_404_page",
-			Method:         "GET",
-			ExpectedStatus: 404,
 		},
 		{
 			Name:             "Health Check endpoint",
@@ -251,6 +223,32 @@ func TestMainApiRoutes(t *testing.T) {
 				`go_threads`,
 			},
 		},
+		{
+			Name:           "Index Page",
+			URL:            "/",
+			Method:         "GET",
+			ExpectedStatus: 200,
+		},
+		{
+			Name:           "Export Settings",
+			URL:            "/api/settings/export",
+			Method:         "GET",
+			ExpectedStatus: 200,
+			BeforeTest:     SetTestENV,
+			AfterTest:      UnsetTestENV,
+			ResponseFunc: func(r *httptest.ResponseRecorder, t *testing.T, bytes []byte) error {
+				var data ExportData
+				err := json.Unmarshal(r.Body.Bytes(), &data)
+				require.Nil(t, err)
+				assert.Len(t, data.Services, len(services.All()))
+				assert.Len(t, data.Groups, len(groups.All()))
+				assert.Len(t, data.Notifiers, len(services.AllNotifiers()))
+				assert.Len(t, data.Users, len(users.All()))
+				assert.Len(t, data.Messages, len(messages.All()))
+				assert.Len(t, data.Checkins, len(checkins.All()))
+				return nil
+			},
+		},
 	}
 
 	for _, v := range tests {
@@ -264,7 +262,7 @@ func TestMainApiRoutes(t *testing.T) {
 
 type HttpFuncTest func(*testing.T) error
 
-type ResponseFunc func(*testing.T, []byte) error
+type ResponseFunc func(*httptest.ResponseRecorder, *testing.T, []byte) error
 
 // HTTPTest contains all the parameters for a HTTP Unit Test
 type HTTPTest struct {
@@ -288,13 +286,6 @@ type HTTPTest struct {
 }
 
 func logTest(t *testing.T, err error) error {
-	e := sentry.NewEvent()
-	e.Environment = "testing"
-	e.Timestamp = utils.Now().Unix()
-	e.Message = fmt.Sprintf("failed test %s", t.Name())
-	e.Transaction = t.Name()
-	sentry.CaptureEvent(e)
-	sentry.CaptureException(err)
 	return err
 }
 
@@ -350,7 +341,7 @@ func RunHTTPTest(test HTTPTest, t *testing.T) (string, *testing.T, error) {
 		assert.Nil(t, err)
 	}
 	if test.ResponseFunc != nil {
-		err := test.ResponseFunc(t, body)
+		err := test.ResponseFunc(rr, t, body)
 		assert.Nil(t, err)
 	}
 

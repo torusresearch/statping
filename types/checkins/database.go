@@ -1,9 +1,9 @@
 package checkins
 
 import (
-	"github.com/torusresearch/statping/database"
-	"github.com/torusresearch/statping/types/metrics"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/database"
+	"github.com/statping/statping/types/metrics"
+	"github.com/statping/statping/utils"
 )
 
 var db database.Database
@@ -15,6 +15,11 @@ func SetDB(database database.Database) {
 }
 
 func (c *Checkin) AfterFind() {
+	c.AllHits = c.Hits()
+	c.AllFailures = c.Failures().LastAmount(32)
+	if last := c.LastHit(); last != nil {
+		c.LastHitTime = last.CreatedAt
+	}
 	metrics.Query("checkin", "find")
 }
 
@@ -41,9 +46,6 @@ func (c *Checkin) Create() error {
 		c.ApiKey = utils.RandomString(32)
 	}
 	q := db.Create(c)
-
-	c.Start()
-	go c.checkinRoutine()
 	return q.Error()
 }
 

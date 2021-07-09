@@ -2,11 +2,12 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/torusresearch/statping/types/errors"
-	"github.com/torusresearch/statping/types/users"
-	"github.com/torusresearch/statping/utils"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/statping/statping/types/errors"
+	"github.com/statping/statping/types/users"
+	"github.com/statping/statping/utils"
 )
 
 func findUser(r *http.Request) (*users.User, int64, error) {
@@ -78,6 +79,23 @@ func apiUserDeleteHandler(w http.ResponseWriter, r *http.Request) {
 func apiAllUsersHandler(w http.ResponseWriter, r *http.Request) {
 	allUsers := users.All()
 	returnJson(allUsers, w, r)
+}
+
+func apiCheckUserTokenHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	token := r.PostForm.Get("token")
+	if token == "" {
+		sendErrorJson(errors.New("missing token parameter"), w, r)
+		return
+	}
+
+	claim, err := parseToken(token)
+	if err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+
+	returnJson(claim, w, r)
 }
 
 func apiCreateUsersHandler(w http.ResponseWriter, r *http.Request) {

@@ -1,14 +1,10 @@
 package notifications
 
 import (
-	"github.com/torusresearch/statping/types/metrics"
-	"github.com/torusresearch/statping/utils"
+	"github.com/statping/statping/types/metrics"
 )
 
-// AfterFind for Notification will set the timezone
 func (n *Notification) AfterFind() (err error) {
-	n.CreatedAt = utils.Now()
-	n.UpdatedAt = utils.Now()
 	metrics.Query("notifier", "find")
 	return
 }

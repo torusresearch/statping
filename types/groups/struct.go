@@ -1,7 +1,7 @@
 package groups
 
 import (
-	"github.com/torusresearch/statping/types/null"
+	"github.com/statping/statping/types/null"
 	"time"
 )
 

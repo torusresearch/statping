@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"github.com/torusresearch/statping/types/core"
-	"github.com/torusresearch/statping/types/services"
 	"net/http"
+
+	"github.com/statping/statping/types/core"
+	"github.com/statping/statping/types/services"
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -11,6 +12,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		ExecuteResponse(w, r, "base.gohtml", core.App, "setup")
 		return
 	}
+	ExecuteResponse(w, r, "base.gohtml", core.App, nil)
+}
+
+func baseHandler(w http.ResponseWriter, r *http.Request) {
 	ExecuteResponse(w, r, "base.gohtml", core.App, nil)
 }
 
