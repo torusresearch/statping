@@ -108,6 +108,9 @@ export default {
   font-size: 0.75rem;
 }
 .mini_success {
-  background-color: #f3f3f3;
+  background-color: #48d337;
+}
+.mini_error{
+  background-color: #ffca46;
 }
 </style>
